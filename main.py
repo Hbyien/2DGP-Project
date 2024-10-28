@@ -19,11 +19,11 @@ def handle_events():
                 running = False
 
             elif event.key == SDLK_d:  # 오른쪽 이동
-                dir += 1
+                dir = 1
                 stop = False
                 look_right = True
             elif event.key == SDLK_a:  # 왼쪽 이동
-                dir -= 1
+                dir = -1
                 stop = False
                 look_right = False
 
@@ -33,12 +33,12 @@ def handle_events():
                 jump_frame = 0  # 점프 시작 시 프레임 리셋
 
         elif event.type == SDL_KEYUP:
-            if event.key == SDLK_d:  # 오른쪽 보고 멈춤
-                dir -= 1
+            if event.key == SDLK_d and dir == 1:  # 오른쪽 보고 멈춤
+                dir = 0
                 stop = True
                 look_right = True
-            elif event.key == SDLK_a:  # 왼쪽 보고 멈춤
-                dir += 1
+            elif event.key == SDLK_a and dir == -1:  # 왼쪽 보고 멈춤
+                dir =0
                 stop = True
                 look_right = False
 
