@@ -29,7 +29,7 @@ def handle_events():
 
             elif event.key == SDLK_SPACE and not is_jumping:  # 스페이스바로 점프
                 is_jumping = True
-                velocity = 15  # 점프 시작 속도
+                velocity = 7  # 점프 시작 속도
                 jump_frame = 0  # 점프 시작 시 프레임 리셋
 
         elif event.type == SDL_KEYUP:
