@@ -86,7 +86,7 @@ class Jump_Up: # 위로 점프
 
         if knight.y <= 90:
             knight.y = 90
-            
+
             knight.state_machine.add_event(('Land', 0))
         pass
 
