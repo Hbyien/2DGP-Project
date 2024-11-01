@@ -1,6 +1,8 @@
 
 from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDL_KEYUP, SDLK_d, SDLK_a
 
+def start_event(e):
+    return e[0] == 'START'
 
 def space_down(e): #e가 space_down 인지 판단 ? False or True
     return e[0]  == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
