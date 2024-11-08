@@ -160,6 +160,8 @@ class Knight:
         self.character_walk = load_image('image//walk.png')
         self.character_idle = load_image('image//idle.png')
         self.character_jump = load_image('image//jump.png')
+        self.character_slash = load_image('image//slash.png')
+
 
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
