@@ -1,5 +1,7 @@
 
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDL_KEYUP, SDLK_d, SDLK_a
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDL_KEYUP, \
+    SDLK_RIGHT, SDLK_LEFT, SDLK_c
+
 
 def start_event(e):
     return e[0] == 'START'
@@ -8,16 +10,24 @@ def space_down(e): #e가 space_down 인지 판단 ? False or True
     return e[0]  == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
 def right_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 
 def right_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
 
 def left_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
 
 def left_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
+
+def click_slash(e):
+    print("click")
+    return e[0] == 'INPUT' and  e[1].type == SDL_KEYDOWN and e[1].key == SDLK_c
+
+
+def time_out(e):
+    return e[0] == 'TIME_OUT'
 
 def land_event(e):
     return e[0] == 'Land'

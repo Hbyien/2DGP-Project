@@ -1,5 +1,8 @@
+from asyncio import Timeout
+
 from pico2d import load_image
-from state_machine import StateMachine, space_down, right_down, right_up, left_down, left_up, start_event, land_event, right_land, left_land
+from state_machine import StateMachine, space_down, right_down, right_up, left_down, left_up, start_event, land_event, \
+    right_land, left_land, time_out,click_slash
 
 
 class Idle:
@@ -25,7 +28,7 @@ class Idle:
         if knight.face_dir == 1:
             knight.character_idle.clip_draw(knight.frame * 94, 0, 94, 101, knight.x, knight.y)
         else:
-            knight.character_idle.clip_composite_draw(knight.frame * 94, 0, 94, 101, 0, 'h', knight.x, knight.y, 94, 101)
+            knight.character_idle.clip_composite_draw(knight.frame * 94, 0, 94, 101, 0, 'h', knight.x, knight.y, 100, 100)
 
 
 class Run:
@@ -144,6 +147,37 @@ class Jump_Move:
             knight.character_jump.clip_composite_draw(knight.jump_frame * 96, 0, 96, 94, 0, 'h', knight.x, knight.y, 100, 100)
         pass
 
+class Slash:
+    @staticmethod
+    def enter(knight, e):
+        knight.frame = 0  # Slash 애니메이션의 첫 프레임
+        knight.slash_timer = 0  # Slash 애니메이션 타이머 초기화
+        knight.slash_frame_delay = 5  # 프레임 전환 속도를 조절할 지연 시간
+
+    @staticmethod
+    def exit(knight, e):
+        knight.slash_timer = None  # 타이머 종료
+        knight.slash_frame_delay = 0  # 프레임 전환 지연 초기화
+
+    @staticmethod
+    def do(knight):
+        # 슬래시 애니메이션 프레임 지연 적용
+        if knight.slash_timer >= knight.slash_frame_delay:
+            knight.frame = (knight.frame + 1) % 2  # Slash 애니메이션의 2 프레임만 재생
+            knight.slash_timer = 0  # 타이머를 초기화
+        else:
+            knight.slash_timer += 1  # 타이머 증가
+
+        # 애니메이션이 끝나면 Slash 상태 종료
+        if knight.frame == 0 and knight.slash_timer == 0:
+            knight.state_machine.add_event(('TIME_OUT', 0))
+
+    @staticmethod
+    def draw(knight):
+        if knight.face_dir == 1:
+            knight.character_slash.clip_draw(knight.frame * 93, 0, 93, 100, knight.x, knight.y)
+        else:
+            knight.character_slash.clip_composite_draw(knight.frame * 93, 0, 93, 100, 0, 'h', knight.x, knight.y, 100, 100)
 
 class Knight:
     def __init__(self):
@@ -166,10 +200,11 @@ class Knight:
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions({
-            Idle: {right_down: Run, left_down: Run, left_up :Run, right_up: Run, space_down : Jump_Up},
-            Run : {right_down:Idle, left_down:Idle, right_up:Idle, left_up:Idle, space_down : Jump_Move},
+            Idle: { right_down: Run, left_down: Run, left_up :Run, right_up: Run, space_down : Jump_Up, click_slash: Slash},
+            Run : {right_down:Idle, left_down:Idle, right_up:Idle, left_up:Idle, space_down : Jump_Move, click_slash: Slash},
             Jump_Up : {land_event : Idle},
-            Jump_Move: {land_event : Idle, left_land: Run, right_land : Run}
+            Jump_Move: {land_event : Idle, left_land: Run, right_land : Run},
+            Slash: {time_out : Idle,right_down: Run, left_down: Run, left_up :Run, right_up: Run}
 
         })
 
