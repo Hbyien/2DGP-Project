@@ -1,8 +1,10 @@
 from pico2d import *
 
+import game_world
 from knight import Knight
+from stage import Stage
 
-
+Map_Width, Map_Height = 1000, 600
 def handle_events():
     global running, dir, look_right, stop, is_jumping, velocity
 
@@ -19,32 +21,33 @@ def handle_events():
                 knight.handle_event(event)
 
 def reset_world():
-    global running, dir, look_right, stop, is_jumping, velocity
-    global world
+    global running
     global knight
+    global stage
 
     running = True
-    world = []
+
+
+    stage = Stage()
+    game_world.add_object(stage, 0)
 
     knight = Knight()
-    world.append(knight)
+    game_world.add_object(knight, 1)
 
 
 
 def update_world():
-    for o in world:
-        o.update()
+    game_world.update()
     pass
 
 
 def render_world():
     clear_canvas()
-    for o in world:
-        o.draw()
+    game_world.render()
     update_canvas()
 
 
-open_canvas()
+open_canvas(Map_Width, Map_Height)
 reset_world()
 
 #게임 루프

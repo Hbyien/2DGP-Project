@@ -1,8 +1,10 @@
-from asyncio import Timeout
 
 from pico2d import load_image, clamp
+
+import game_world
+from slash_effect import Slash_Effect
 from state_machine import (StateMachine, space_down, right_down, right_up, left_down, left_up,
-                           start_event,time_out, c_down)
+                           start_event, c_down)
 
 
 class Idle:
@@ -12,10 +14,7 @@ class Idle:
             return
         elif Jump.is_Jump:
             return
-        # if left_up(e) or right_down(e):
-        #     knight.face_dir = -1
-        # elif right_up(e) or left_down(e) or start_event(e):
-        #     knight.face_dir = 1
+
         else:
             knight.dir = 0
             knight.frame = 0
@@ -24,6 +23,7 @@ class Idle:
     def exit(knight, e):
         if c_down(e):
             Slash.enter(knight, e)
+
         elif space_down(e):
             Jump.enter(knight, e)
         pass
@@ -65,6 +65,7 @@ class Run:
     def exit(knight, e):
         if c_down(e):
             Slash.enter(knight, e)
+
         elif space_down(e):
             Jump.enter(knight, e)
         pass
@@ -119,6 +120,7 @@ class Jump:
             Jump.velocity = 10  # 점프 속도를 리셋하여 반복 점프 가능하게 설정
             Jump.is_Jump = True
 
+
     @staticmethod
     def exit(knight, e):
         pass
@@ -138,9 +140,11 @@ class Jump:
             knight.y = 90
             Jump.is_Jump = False
 
+
     @staticmethod
     def draw(knight):
         # 상승 또는 하강 여부에 따라 프레임 결정
+
         if Jump.velocity > 0:  # 상승 중
             Jump.jump_frame = min(Jump.jump_frame, 2)  # 프레임 0–2 사용
         else:  # 하강 중
@@ -168,6 +172,8 @@ class Slash:
                 knight.dir, knight.face_dir = -1, -1
 
             Slash.is_Slash = True
+        knight.slash_effect()
+
 
     @staticmethod
     def exit(knight, e):
@@ -226,3 +232,8 @@ class Knight:
 
     def draw(self):
         self.state_machine.draw()
+
+    def slash_effect(self):
+        slash_effect = Slash_Effect(self.x, self.y, self.face_dir*15)
+        game_world.add_object(slash_effect, 1)
+
