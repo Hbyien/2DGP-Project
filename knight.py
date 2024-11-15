@@ -19,6 +19,7 @@ class Idle:
             knight.dir = 0
             knight.frame = 0
 
+
     @staticmethod
     def exit(knight, e):
         if c_down(e):
@@ -213,6 +214,8 @@ class Knight:
         self.character_idle = load_image('image//idle.png')
         self.character_jump = load_image('image//jump.png')
         self.character_slash = load_image('image//slash.png')
+
+        
 
 
         self.state_machine = StateMachine(self)
