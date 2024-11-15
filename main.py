@@ -1,17 +1,12 @@
+import game_framework
 from pico2d import open_canvas, delay, close_canvas
 
-import play_mode
+import logo_mode as start_mode #로고 모드를 임포트 하되 이름을 스타트 모드로
+
 
 Map_Width, Map_Height = 1000, 600
+
+
 open_canvas(Map_Width, Map_Height)
-play_mode.init()
-
-#게임 루프
-
-while play_mode.running :
-    play_mode.handle_events()
-    play_mode.update()
-    play_mode.draw()
-    delay(0.01)
-play_mode.finish()
+game_framework.run(start_mode)
 close_canvas()

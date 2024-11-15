@@ -4,7 +4,7 @@
 
 
 #world = []#단일계층구조
-world = [[], []]
+world = [[] for _ in range(2)]
 
 def add_object(o, depth):
     world[depth].append(o)
@@ -24,9 +24,9 @@ def remove_object(o):
         if o in layer:
             layer.remove(o)
             return #지우는 미션은 달성, 다른 요소는 더이상 체크할 필요없다.
-            #안하면 레이어만큼 반복하다.
+            #안하면 레이어만큼 반복하다.print('에러 : 존재하지 않는 객체를 지운다고?')
 
 
-    print('에러 : 존재하지 않는 객체를 지운다고?')
-
-
+def clear():
+    for layer in world:
+        layer.clear()
