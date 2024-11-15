@@ -112,10 +112,11 @@ class Jump:
             knight.frame = 0
 
             # Run 상태에서 수평 방향을 유지
-            if right_down(e) or left_down(e):
+            if right_down(e) or left_up(e):
                 knight.dir, knight.face_dir = 1, 1
             elif left_down(e) or right_up(e):
                 knight.dir, knight.face_dir = -1, -1
+
 
             Jump.velocity = 10  # 점프 속도를 리셋하여 반복 점프 가능하게 설정
             Jump.is_Jump = True
@@ -130,6 +131,8 @@ class Jump:
         # 점프 속도에 따라 위로 이동
         knight.y += Jump.velocity
         Jump.velocity -= Jump.gravity  # 중력 적용하여 속도 감소
+
+
 
         # Run 상태에서 포물선 경로를 만들기 위한 수평 이동
         knight.x += knight.dir * 5
@@ -205,11 +208,7 @@ class Knight:
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
-        # self.velocity = 0
-        # self.gravity = 0.5
-        #self.look_right = True
-        #self.stop = True
-        #self.is_jumping = False
+
         self.character_walk = load_image('image//walk.png')
         self.character_idle = load_image('image//idle.png')
         self.character_jump = load_image('image//jump.png')

@@ -3,8 +3,9 @@ from pico2d import *
 import game_world
 from knight import Knight
 from stage import Stage
+from rhythm_base import Rhythm_Base
 
-Map_Width, Map_Height = 1000, 600
+
 
 def handle_events():
     global running, dir, look_right, stop, is_jumping, velocity
@@ -21,10 +22,9 @@ def handle_events():
             if event.type in (SDL_KEYDOWN, SDL_KEYUP):
                 knight.handle_event(event)
 
-def reset_world():
+def init():
     global running
     global knight
-    global stage
 
     running = True
 
@@ -32,32 +32,25 @@ def reset_world():
     stage = Stage()
     game_world.add_object(stage, 0)
 
+
+    rhythm_base = Rhythm_Base()
+    game_world.add_object(rhythm_base, 0)
+
     knight = Knight()
     game_world.add_object(knight, 1)
 
+def finish():
+    pass
 
-
-def update_world():
+def update():
     game_world.update()
     pass
 
 
-def render_world():
+def draw():
     clear_canvas()
     game_world.render()
     update_canvas()
 
 
-open_canvas(Map_Width, Map_Height)
-reset_world()
-
-#게임 루프
-
-while running :
-    handle_events()
-    update_world()
-    render_world()
-    delay(0.01)
-
-close_canvas()
 
