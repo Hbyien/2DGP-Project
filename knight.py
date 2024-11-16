@@ -2,9 +2,22 @@
 from pico2d import load_image, clamp
 
 import game_world
+import game_framework
 from slash_effect import Slash_Effect
 from state_machine import (StateMachine, space_down, right_down, right_up, left_down, left_up,
                            start_event, c_down)
+
+#RUN SPEED
+PIXEL_PER_METER = (10.0/0.3)
+RUN_SPEED_KMPH= 50.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0/ 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM/ 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+#Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0/ TIME_PER_ACTION
+FRAMES_PER_ACTION = 6
 
 
 class Idle:
@@ -36,7 +49,7 @@ class Idle:
         elif Jump.is_Jump:
             Jump.do(knight)
         else:
-            knight.frame = (knight.frame + 1) % 4
+            knight.frame = (knight.frame + FRAMES_PER_ACTION*ACTION_PER_TIME*game_framework.frame_time) % 4
 
     @staticmethod
     def draw(knight):
@@ -46,9 +59,9 @@ class Idle:
             Jump.draw(knight)
         else:
             if knight.face_dir == 1:
-                knight.character_idle.clip_draw(knight.frame * 94, 0, 94, 101, knight.x, knight.y)
+                knight.character_idle.clip_draw(int(knight.frame) * 94, 0, 94, 101, knight.x, knight.y)
             else:
-                knight.character_idle.clip_composite_draw(knight.frame * 94, 0, 94, 101, 0, 'h', knight.x, knight.y, 100, 100)
+                knight.character_idle.clip_composite_draw(int(knight.frame) * 94, 0, 94, 101, 0, 'h', knight.x, knight.y, 100, 100)
 
 
 class Run:
@@ -78,9 +91,9 @@ class Run:
         elif Jump.is_Jump:
             Jump.do(knight)
         else:
-            knight.x += knight.dir*5
+            knight.x += knight.dir* RUN_SPEED_PPS * game_framework.frame_time
             knight.x = clamp(10,knight.x, 790)
-            knight.frame = (knight.frame + 1) % 6
+            knight.frame = (knight.frame + FRAMES_PER_ACTION*ACTION_PER_TIME*game_framework.frame_time) % 6
 
 
 
@@ -93,9 +106,9 @@ class Run:
             Jump.draw(knight)
         else:
             if knight.face_dir == 1:
-                knight.character_walk.clip_draw(knight.frame * 96, 0, 96, 94, knight.x, 90)
+                knight.character_walk.clip_draw(int(knight.frame) * 96, 0, 96, 94, knight.x, 90)
             else:
-                knight.character_walk.clip_composite_draw(knight.frame * 96, 0, 96, 94, 0, 'h', knight.x, 90, 100, 100)
+                knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.x, 90, 100, 100)
 
 
 
