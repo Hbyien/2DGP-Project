@@ -176,8 +176,7 @@ class Jump:
 
 class Slash:
     is_Slash = False
-    slash_timer = 0
-    slash_frame_delay = 5
+    
     @staticmethod
     def enter(knight, e):
         if not Slash.is_Slash:
@@ -198,23 +197,16 @@ class Slash:
 
     @staticmethod
     def do(knight):
-        # 슬래시 애니메이션 프레임 지연 적용
-        if Slash.slash_timer >= Slash.slash_frame_delay:
-            knight.frame = (knight.frame + 1) % 2  # Slash 애니메이션의 2 프레임만 재생
-            Slash.slash_timer = 0  # 타이머를 초기화
-        else:
-            Slash.slash_timer += 1  # 타이머 증가
 
-        # 애니메이션이 끝나면 Slash 상태 종료
-        if knight.frame == 0 and Slash.slash_timer == 0:
+        knight.frame = (knight.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
+        if knight.frame >= 2:
             Slash.is_Slash = False
-
     @staticmethod
     def draw(knight):
         if knight.face_dir == 1:
-            knight.character_slash.clip_draw(knight.frame * 93, 0, 93, 100, knight.x, knight.y)
+            knight.character_slash.clip_draw(int(knight.frame) * 93, 0, 93, 100, knight.x, knight.y)
         else:
-            knight.character_slash.clip_composite_draw(knight.frame * 93, 0, 93, 100, 0, 'h', knight.x, knight.y, 100, 100)
+            knight.character_slash.clip_composite_draw(int(knight.frame) * 93, 0, 93, 100, 0, 'h', knight.x, knight.y, 100, 100)
 
 class Knight:
     def __init__(self):
