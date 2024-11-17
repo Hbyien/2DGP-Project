@@ -111,72 +111,58 @@ class Run:
                 knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.x, 90, 100, 100)
 
 
-
-
-
 class Jump:
     is_Jump = False
-    velocity = 10
-    gravity = 0.5
+    velocity = 20
+    gravity = 1.0
     jump_frame = 0
 
     @staticmethod
     def enter(knight, e):
         if not Jump.is_Jump:  # 점프 중이 아닐 때만 초기화
             knight.frame = 0
-
-            # Run 상태에서 수평 방향을 유지
-            if right_down(e) or left_up(e):
-                knight.dir, knight.face_dir = 1, 1
-            elif left_down(e) or right_up(e):
-                knight.dir, knight.face_dir = -1, -1
-
-
-            Jump.velocity = 10  # 점프 속도를 리셋하여 반복 점프 가능하게 설정
+            Jump.velocity = 10  # 점프 속도를 초기화
             Jump.is_Jump = True
-
 
     @staticmethod
     def exit(knight, e):
-        pass
+        Jump.is_Jump = False  # 점프 상태를 초기화
 
     @staticmethod
     def do(knight):
-        # 점프 속도에 따라 위로 이동
-        knight.y += Jump.velocity
-        Jump.velocity -= Jump.gravity  # 중력 적용하여 속도 감소
+        # 수직 이동: 점프 속도와 중력 적용
+        knight.y += Jump.velocity ** 2 * 0.02 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
+        Jump.velocity -= 20 * game_framework.frame_time
+
+        # 수평 이동: 점프 시에도 이동 방향 유지
+        knight.x += knight.dir * RUN_SPEED_PPS * 0.5 * game_framework.frame_time  # x 이동 거리를 줄임
+        knight.x = clamp(10, knight.x, 790)  # 화면 경계 안으로 제한
 
 
-
-        # Run 상태에서 포물선 경로를 만들기 위한 수평 이동
-        knight.x += knight.dir * 5
-        knight.x = clamp(10, knight.x, 790)
 
         # 착지 시 점프 종료
-        if knight.y <= 90:
+        if knight.y <= 90:  # 지면 높이에 도달하면
             knight.y = 90
             Jump.is_Jump = False
 
-
     @staticmethod
     def draw(knight):
-        # 상승 또는 하강 여부에 따라 프레임 결정
-
+        # 상승 중이면 0-2 프레임, 하강 중이면 3-4 프레임 사용
         if Jump.velocity > 0:  # 상승 중
-            Jump.jump_frame = min(Jump.jump_frame, 2)  # 프레임 0–2 사용
+            Jump.jump_frame = int(knight.frame) % 3  # 프레임 0-2
         else:  # 하강 중
-            Jump.jump_frame = max(Jump.jump_frame, 3)  # 프레임 3–4 사용
+            Jump.jump_frame = min(3 + int(knight.frame) % 2, 4)  # 프레임 3-4
 
+        # 방향에 따라 점프 애니메이션 출력
         if knight.face_dir == 1:
             knight.character_jump.clip_draw(Jump.jump_frame * 96, 0, 96, 94, knight.x, knight.y)
         else:
             knight.character_jump.clip_composite_draw(Jump.jump_frame * 96, 0, 96, 94, 0, 'h', knight.x, knight.y, 100, 100)
 
 
-
 class Slash:
     is_Slash = False
-    
+
     @staticmethod
     def enter(knight, e):
         if not Slash.is_Slash:
