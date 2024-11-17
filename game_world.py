@@ -4,7 +4,7 @@
 
 
 #world = []#단일계층구조
-world = [[] for _ in range(2)]
+world = [[] for _ in range(4)]
 
 def add_object(o, depth):
     world[depth].append(o)

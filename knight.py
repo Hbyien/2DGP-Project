@@ -7,6 +7,10 @@ from slash_effect import Slash_Effect
 from state_machine import (StateMachine, space_down, right_down, right_up, left_down, left_up,
                            start_event, c_down)
 
+import rhythm_bar
+
+BOTTOM = 250
+
 #RUN SPEED
 PIXEL_PER_METER = (10.0/0.3)
 RUN_SPEED_KMPH= 50.0
@@ -77,6 +81,7 @@ class Run:
 
     @staticmethod
     def exit(knight, e):
+
         if c_down(e):
             Slash.enter(knight, e)
 
@@ -106,9 +111,9 @@ class Run:
             Jump.draw(knight)
         else:
             if knight.face_dir == 1:
-                knight.character_walk.clip_draw(int(knight.frame) * 96, 0, 96, 94, knight.x, 90)
+                knight.character_walk.clip_draw(int(knight.frame) * 96, 0, 96, 94, knight.x, knight.y)
             else:
-                knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.x, 90, 100, 100)
+                knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.x, knight.y, 100, 100)
 
 
 class Jump:
@@ -119,10 +124,12 @@ class Jump:
 
     @staticmethod
     def enter(knight, e):
-        if not Jump.is_Jump:  # 점프 중이 아닐 때만 초기화
-            knight.frame = 0
-            Jump.velocity = 10  # 점프 속도를 초기화
-            Jump.is_Jump = True
+        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+
+            if not Jump.is_Jump:  # 점프 중이 아닐 때만 초기화
+                knight.frame = 0
+                Jump.velocity = 10  # 점프 속도를 초기화
+                Jump.is_Jump = True
 
     @staticmethod
     def exit(knight, e):
@@ -141,8 +148,8 @@ class Jump:
 
 
         # 착지 시 점프 종료
-        if knight.y <= 90:  # 지면 높이에 도달하면
-            knight.y = 90
+        if knight.y <= BOTTOM:  # 지면 높이에 도달하면
+            knight.y = BOTTOM
             Jump.is_Jump = False
 
     @staticmethod
@@ -165,16 +172,17 @@ class Slash:
 
     @staticmethod
     def enter(knight, e):
-        if not Slash.is_Slash:
-            knight.frame = 0
+        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+            if not Slash.is_Slash:
+                knight.frame = 0
 
-            if right_down(e) or left_down(e):
-                knight.dir, knight.face_dir = 1, 1
-            elif left_down(e) or right_up(e):
-                knight.dir, knight.face_dir = -1, -1
+                if right_down(e) or left_down(e):
+                    knight.dir, knight.face_dir = 1, 1
+                elif left_down(e) or right_up(e):
+                    knight.dir, knight.face_dir = -1, -1
 
-            Slash.is_Slash = True
-        knight.slash_effect()
+                Slash.is_Slash = True
+            knight.slash_effect()
 
 
     @staticmethod
@@ -196,7 +204,7 @@ class Slash:
 
 class Knight:
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 400, BOTTOM
         self.frame = 0
         self.dir = 0
         self.face_dir = 1

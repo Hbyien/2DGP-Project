@@ -1,6 +1,6 @@
 from pico2d import load_image
 
-Map_Width, Map_Height = 1000, 600
+Map_Width, Map_Height = 1200, 600
 class Stage:
     def __init__(self):
         self.image = load_image('image//stage1.png')

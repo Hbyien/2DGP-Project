@@ -6,6 +6,8 @@ import title_mode
 from knight import Knight
 from stage import Stage
 from rhythm_base import Rhythm_Base
+from bounce import Bounce
+from rhythm_bar import Rhythm_Bar
 
 
 
@@ -27,8 +29,11 @@ def handle_events():
 def init():
 
     global knight
-    stage = Stage()
-    game_world.add_object(stage, 0)
+    #stage = Stage()
+    #game_world.add_object(stage, 0)
+
+    bounce = Bounce()
+    game_world.add_object(bounce, 1)
 
 
     rhythm_base = Rhythm_Base()
@@ -36,6 +41,9 @@ def init():
 
     knight = Knight()
     game_world.add_object(knight, 1)
+
+    rhythm_bar = Rhythm_Bar()
+    game_world.add_object(rhythm_bar, 2)
 
 def finish():
     game_world.clear()
