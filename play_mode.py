@@ -9,7 +9,7 @@ from rhythm_base import Rhythm_Base
 from bounce import Bounce
 from rhythm_bar import Rhythm_Bar
 
-
+from wmonster import Wmonster
 
 def handle_events():
     global dir, look_right, stop, is_jumping, velocity
@@ -44,6 +44,9 @@ def init():
 
     rhythm_bar = Rhythm_Bar()
     game_world.add_object(rhythm_bar, 2)
+
+    wmonster = Wmonster()
+    game_world.add_object(wmonster, 1)
 
 def finish():
     game_world.clear()

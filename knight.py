@@ -124,7 +124,7 @@ class Jump:
 
     @staticmethod
     def enter(knight, e):
-        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
 
             if not Jump.is_Jump:  # 점프 중이 아닐 때만 초기화
                 knight.frame = 0
@@ -172,7 +172,7 @@ class Slash:
 
     @staticmethod
     def enter(knight, e):
-        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
             if not Slash.is_Slash:
                 knight.frame = 0
 
