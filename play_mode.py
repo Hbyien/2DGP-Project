@@ -11,6 +11,7 @@ from bounce import Bounce
 from rhythm_bar import Rhythm_Bar
 from slash_effect import Slash_Effect
 from wmonster import Wmonster
+from fly import Fly
 
 def handle_events():
 
@@ -50,12 +51,13 @@ def init():
     wmonster = Wmonster()
     game_world.add_object(wmonster, 1)
 
-    slash_effect = Slash_Effect()
-    #game_world.add_object(slash_effect, 1)
+    fly = Fly()
+    game_world.add_object(fly, 1)
 
 
 
     game_world.add_collision_pair('slash_effect:wmonster',None,wmonster)
+    game_world.add_collision_pair('slash_effect:fly',None,fly)
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
     #game_world.add_collision_pair('knight: wmonster', knight,  None)

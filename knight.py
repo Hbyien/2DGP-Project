@@ -124,7 +124,7 @@ class Jump:
 
     @staticmethod
     def enter(knight, e):
-        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
 
             if not Jump.is_Jump:  # 점프 중이 아닐 때만 초기화
                 knight.frame = 0
@@ -172,7 +172,7 @@ class Slash:
 
     @staticmethod
     def enter(knight, e):
-        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
             if not Slash.is_Slash:
                 knight.frame = 0
 
@@ -239,6 +239,7 @@ class Knight:
         slash_effect = Slash_Effect(self.x, self.y, self.face_dir*15)
         game_world.add_object(slash_effect, 1)
         game_world.add_collision_pair('slash_effect:wmonster', slash_effect, None)
+        game_world.add_collision_pair('slash_effect:fly', slash_effect, None)
 
     def get_bb(self):
         return self.x - 30, self.y - 45, self.x + 30, self.y + 45
