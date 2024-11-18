@@ -6,6 +6,25 @@
 #world = []#단일계층구조
 world = [[] for _ in range(4)]
 
+collision_pairs={}
+
+def add_collision_pair(group,a,b):
+    if group not in collision_pairs:
+        collision_pairs[group]=[ [] , [] ]
+    if a:
+        collision_pairs[group][0].append(a)
+    if b:
+        collision_pairs[group][1].append(b)
+
+
+
+def remove_collision_object(o):
+    for pairs in collision_pairs.values():
+        if o in pairs[0]:
+            pairs[0].remove(o)
+        if o in pairs[1]:
+            pairs[1].remove(o)
+
 def add_object(o, depth):
     world[depth].append(o)
 
@@ -19,13 +38,16 @@ def update():
         for o in layer:
             o.update()
 
+
+
 def remove_object(o):
     for layer in world:
         if o in layer:
             layer.remove(o)
-            return #지우는 미션은 달성, 다른 요소는 더이상 체크할 필요없다.
-            #안하면 레이어만큼 반복하다.print('에러 : 존재하지 않는 객체를 지운다고?')
-
+            remove_collision_object(o)
+            del o
+            return
+    raise ValueError('Cannot delete non existing object')
 
 def clear():
     for layer in world:
@@ -34,12 +56,25 @@ def clear():
 
 
 def collide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_bb()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
 
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
+    al,ab,ar,at=a.get_bb()
+    bl,bb,br,bt= b.get_bb()
 
-    return True
+
+    if ar<bl: return False
+    if al>br: return False
+    if at<bb: return False
+    if ab>bt : return False
+
+    return True # 충돌발생
+
+def handle_collisions():
+    for group,pairs in collision_pairs.items():
+        for a in pairs[0]:
+            for b in pairs[1]:
+                if collide(a,b):
+                    print(f'{group} collide')
+                    a.handle_collision(group,b)
+                    b.handle_collision(group,a)
+    return None
+

@@ -47,7 +47,7 @@ class Wmonster:
 
         draw_rectangle(*self.get_bb())
 
-    def handle_evenet(self, event):
+    def handle_event(self, event):
         pass
 
 
@@ -56,3 +56,9 @@ class Wmonster:
 
 
 
+    def handle_collision(self, group, other):
+        if group == 'slash_effect:wmonster':
+            game_world.remove_object(self)
+
+        if group =='knight: wmonster':
+            game_framework.quit()

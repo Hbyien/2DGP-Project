@@ -1,4 +1,4 @@
-from pico2d import load_image, draw_rectangle
+from pico2d import *
 
 import game_world
 import game_framework
@@ -32,3 +32,7 @@ class Slash_Effect:
 
     def get_bb(self):
         return self.x - 40, self.y - 40, self.x + 40, self.y + 40
+
+    def handle_collision(self, group, other):
+        if group == 'slash_effect:wmonster':
+            game_world.remove_object(self)

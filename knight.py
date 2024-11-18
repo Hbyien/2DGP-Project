@@ -138,7 +138,7 @@ class Jump:
     @staticmethod
     def do(knight):
         # 수직 이동: 점프 속도와 중력 적용
-        knight.y += Jump.velocity ** 2 * 0.05 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
+        knight.y += Jump.velocity ** 2 * 0.02 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
         Jump.velocity -= 20 * game_framework.frame_time
 
         # 수평 이동: 점프 시에도 이동 방향 유지
@@ -238,6 +238,14 @@ class Knight:
     def slash_effect(self):
         slash_effect = Slash_Effect(self.x, self.y, self.face_dir*15)
         game_world.add_object(slash_effect, 1)
+        game_world.add_collision_pair('slash_effect:wmonster', slash_effect, None)
 
     def get_bb(self):
         return self.x - 30, self.y - 45, self.x + 30, self.y + 45
+
+    def handle_collision(self, group, other):
+
+
+        if group == 'knight: wmonster':
+            game_framework.quit()
+        pass

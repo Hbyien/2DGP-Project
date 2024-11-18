@@ -3,16 +3,18 @@ from pico2d import *
 import game_framework
 import game_world
 import title_mode
+
 from knight import Knight
 from stage import Stage
 from rhythm_base import Rhythm_Base
 from bounce import Bounce
 from rhythm_bar import Rhythm_Bar
-
+from slash_effect import Slash_Effect
 from wmonster import Wmonster
 
 def handle_events():
-    global dir, look_right, stop, is_jumping, velocity
+
+    #global dir, look_right, stop, is_jumping, velocity
 
     events = get_events()
     for event in events:
@@ -48,12 +50,28 @@ def init():
     wmonster = Wmonster()
     game_world.add_object(wmonster, 1)
 
+    slash_effect = Slash_Effect()
+    #game_world.add_object(slash_effect, 1)
+
+
+
+    game_world.add_collision_pair('slash_effect:wmonster',None,wmonster)
+
+    #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
+    #game_world.add_collision_pair('knight: wmonster', knight,  None)
+
+
+
 def finish():
     game_world.clear()
     pass
 
 def update():
     game_world.update()
+    game_world.handle_collisions()
+
+    #if game_world.collide(slash_effect, wmonster):
+
 
     pass
 
@@ -64,4 +82,8 @@ def draw():
     update_canvas()
 
 
+def pause():
+    pass
 
+def resume():
+    pass
