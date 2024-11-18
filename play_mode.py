@@ -54,6 +54,7 @@ def finish():
 
 def update():
     game_world.update()
+
     pass
 
 

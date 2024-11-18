@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
 
 import game_world
 import game_framework
@@ -20,6 +20,9 @@ class Slash_Effect:
         else:
             self.image.clip_composite_draw(0, 0, 190, 144, 0, 'h', self.x, self.y, 100, 100)
 
+        draw_rectangle(*self.get_bb())
+
+
     def update(self):
 
         self.x += self.velocity*100*game_framework.frame_time
@@ -27,3 +30,5 @@ class Slash_Effect:
         if abs(self.x - self.knight_x) > 100:
             game_world.remove_object(self)
 
+    def get_bb(self):
+        return self.x - 40, self.y - 40, self.x + 40, self.y + 40

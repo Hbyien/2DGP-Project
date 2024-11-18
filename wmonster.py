@@ -45,8 +45,14 @@ class Wmonster:
         elif self.dir ==1:
             self.walk_image.clip_draw(int(self.frame)* self.frame_width, 0, self.frame_width, self.frame_height, self.x, self.y)
 
+        draw_rectangle(*self.get_bb())
+
     def handle_evenet(self, event):
         pass
+
+
+    def get_bb(self):
+        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
 
 
 

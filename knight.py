@@ -1,5 +1,5 @@
 
-from pico2d import load_image, clamp
+from pico2d import load_image, clamp, draw_rectangle
 
 import game_world
 import game_framework
@@ -97,7 +97,7 @@ class Run:
             Jump.do(knight)
         else:
             knight.x += knight.dir* RUN_SPEED_PPS * game_framework.frame_time
-            knight.x = clamp(10,knight.x, 790)
+            knight.x = clamp(10,knight.x, 1190)
             knight.frame = (knight.frame + FRAMES_PER_ACTION*ACTION_PER_TIME*game_framework.frame_time) % 6
 
 
@@ -119,7 +119,7 @@ class Run:
 class Jump:
     is_Jump = False
     velocity = 20
-    gravity = 1.0
+    gravity = 1
     jump_frame = 0
 
     @staticmethod
@@ -138,12 +138,12 @@ class Jump:
     @staticmethod
     def do(knight):
         # 수직 이동: 점프 속도와 중력 적용
-        knight.y += Jump.velocity ** 2 * 0.02 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
+        knight.y += Jump.velocity ** 2 * 0.05 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
         Jump.velocity -= 20 * game_framework.frame_time
 
         # 수평 이동: 점프 시에도 이동 방향 유지
         knight.x += knight.dir * RUN_SPEED_PPS * 0.5 * game_framework.frame_time  # x 이동 거리를 줄임
-        knight.x = clamp(10, knight.x, 790)  # 화면 경계 안으로 제한
+        knight.x = clamp(10, knight.x, 1190)  # 화면 경계 안으로 제한
 
 
 
@@ -233,8 +233,11 @@ class Knight:
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
 
     def slash_effect(self):
         slash_effect = Slash_Effect(self.x, self.y, self.face_dir*15)
         game_world.add_object(slash_effect, 1)
 
+    def get_bb(self):
+        return self.x - 30, self.y - 45, self.x + 30, self.y + 45
