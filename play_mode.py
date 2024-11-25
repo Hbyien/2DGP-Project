@@ -67,6 +67,7 @@ def init():
     game_world.add_collision_pair('slash_effect:fly',None,fly)
     game_world.add_collision_pair('knight:coin', knight, coin)
     game_world.add_collision_pair('knight_top:qblock', knight, qblock)
+    game_world.add_collision_pair('knight:qblock', knight, qblock)
 
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)

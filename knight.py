@@ -141,13 +141,18 @@ class Jump:
         knight.y += Jump.velocity ** 2 * 0.02 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
         Jump.velocity -= 20 * game_framework.frame_time
 
-        # 수평 이동: 점프 시에도 이동 방향 유지
-        knight.x += knight.dir * RUN_SPEED_PPS * 0.5 * game_framework.frame_time  # x 이동 거리를 줄임
-        knight.x = clamp(10, knight.x, 1190)  # 화면 경계 안으로 제한
 
-        if  knight.jump_top_collide == True:
+        if knight.block_collide == True:
+            knight.block_collide = False
+        else:
+            # 수평 이동: 점프 시에도 이동 방향 유지
+            knight.x += knight.dir * RUN_SPEED_PPS * 0.5 * game_framework.frame_time  # x 이동 거리를 줄임
+            knight.x = clamp(10, knight.x, 1190)  # 화면 경계 안으로 제한
+
+        if knight.jump_top_collide == True:
             Jump.velocity = -5
             knight.jump_top_collide = False
+
 
 
         # 착지 시 점프 종료
@@ -219,6 +224,7 @@ class Knight:
 
         
         self.jump_top_collide = False
+        self.block_collide = False
 
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -268,5 +274,7 @@ class Knight:
 
         if group == 'knight_top:qblock':
             self.jump_top_collide = True
+        if group == 'knight:qblock':
+            self.block_collide = True
             pass
         pass

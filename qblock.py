@@ -14,7 +14,9 @@ class Qblock:
         self.x, self.y = 400, 350
         self.block1_image = load_image('objects//qblock1.png')
         self.block2_image = load_image('objects//qblock2.png')
-        self.block3_image = load_image('objects//qblock3.png')
+
+
+        self.already_collision = False
 
     def update(self):
         pass
@@ -22,12 +24,17 @@ class Qblock:
         self.block1_image.draw(self.x, self.y, 50, 50)
         draw_rectangle(*self.get_bb())
 
+        if self.already_collision:
+            self.block2_image.draw(self.x, self.y, 50, 50)
+
     def get_bb(self):
-        return self.x-20, self.y-20, self.x+20, self.y+20
+        return self.x-30, self.y-30, self.x+30, self.y+30
 
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
-            print("q박스와 충돌함")
+            self.already_collision = True
+        if group == 'knight_top:qblock':
+            pass
 
 
 
