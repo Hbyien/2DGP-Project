@@ -1,0 +1,33 @@
+import game_framework
+import game_world
+
+from pico2d import *
+
+PIXEL_PER_METER = (10.0 / 0.3)
+RUN_SPEED_KMPH = 10.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+class Qblock:
+    def __init__(self):
+        self.x, self.y = 400, 350
+        self.block1_image = load_image('objects//qblock1.png')
+        self.block2_image = load_image('objects//qblock2.png')
+        self.block3_image = load_image('objects//qblock3.png')
+
+    def update(self):
+        pass
+    def draw(self):
+        self.block1_image.draw(self.x, self.y, 50, 50)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x-20, self.y-20, self.x+20, self.y+20
+
+    def handle_collision(self, group, other):
+        if group == 'knight_top:qblock':
+            print("q박스와 충돌함")
+
+
+

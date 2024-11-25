@@ -13,6 +13,7 @@ from slash_effect import Slash_Effect
 from wmonster import Wmonster
 from fly import Fly
 from coin import Coin
+from qblock import Qblock
 
 def handle_events():
 
@@ -58,11 +59,15 @@ def init():
     coin = Coin()
     game_world.add_object(coin, 1)
 
+    qblock = Qblock()
+    game_world.add_object(qblock, 1)
+
 
     game_world.add_collision_pair('slash_effect:wmonster',None,wmonster)
     game_world.add_collision_pair('slash_effect:fly',None,fly)
-    game_world.add_collision_pair('knight:coin', None, coin)
-    game_world.add_collision_pair('knight:coin', knight, None)
+    game_world.add_collision_pair('knight:coin', knight, coin)
+    game_world.add_collision_pair('knight_top:qblock', knight, qblock)
+
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
     #game_world.add_collision_pair('knight: wmonster', knight,  None)

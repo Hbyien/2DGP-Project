@@ -145,6 +145,9 @@ class Jump:
         knight.x += knight.dir * RUN_SPEED_PPS * 0.5 * game_framework.frame_time  # x 이동 거리를 줄임
         knight.x = clamp(10, knight.x, 1190)  # 화면 경계 안으로 제한
 
+        if  knight.jump_top_collide == True:
+            Jump.velocity = -5
+            knight.jump_top_collide = False
 
 
         # 착지 시 점프 종료
@@ -215,7 +218,7 @@ class Knight:
         self.character_slash = load_image('image//slash.png')
 
         
-
+        self.jump_top_collide = False
 
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -234,6 +237,8 @@ class Knight:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb_top())
+        draw_rectangle(*self.get_bb_bottom())
 
     def slash_effect(self):
         slash_effect = Slash_Effect(self.x, self.y, self.face_dir*15)
@@ -243,14 +248,25 @@ class Knight:
 
 
     def get_bb(self):
-        return self.x - 30, self.y - 45, self.x + 30, self.y + 45
+        return self.x - 30, self.y - 38, self.x + 30, self.y + 40
+
+    def get_bb_top(self):   #머리 충돌 체크 위한거
+        return self.x - 30, self.y +41, self.x + 30, self.y + 45
+
+    def get_bb_bottom(self): # 발 충돌체크 위한거
+        return self.x - 30, self.y - 44, self.x + 30, self.y - 40
+
 
     def handle_collision(self, group, other):
 
 
-        if group == 'knight: wmonster':
+        if group == 'knight:wmonster':
             game_framework.quit()
 
         if group == 'knight:coin':
+            pass
+
+        if group == 'knight_top:qblock':
+            self.jump_top_collide = True
             pass
         pass
