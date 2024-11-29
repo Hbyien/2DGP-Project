@@ -17,7 +17,7 @@ FRAMES_PER_ACTION = 4.0
 class Coin:
 
     def __init__(self):
-        self.x, self.y = 600, 350
+        self.x, self.y = 600, 200
         self.coin_image = load_image('objects//coin.png')
         self.frame = 0
         self.frame_width, self.frame_height = 72//4, 17
@@ -33,8 +33,9 @@ class Coin:
     def get_bb(self):
         return self.x-20, self.y-20, self.x+20, self.y+20
 
+
     def handle_collision(self, group, other):
-        if group == 'knight:coin':
+        if group == 'knight_top:coin':
             print("충돌은 함")
             self.coin_count+=1
             print(self.coin_count)

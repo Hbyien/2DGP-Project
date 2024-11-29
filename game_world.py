@@ -1,7 +1,8 @@
 #world[0] : 백그라운드 객체들, 즉 맨 아래에 그려야할 객체들
 #world[1] : 포어그라운들 객체들, 위에 그려야할 객체들
 #
-
+import coin
+import knight
 
 #world = []#단일계층구조
 world = [[] for _ in range(4)]
@@ -56,8 +57,11 @@ def clear():
 
 
 def collide(a, b):
+    if a == knight.Knight and b== coin.Coin:
+        al,ab,ar,at=a.get_bb_top()
+    else:
+        al, ab, ar, at = a.get_bb()
 
-    al,ab,ar,at=a.get_bb()
     bl,bb,br,bt= b.get_bb()
 
 
@@ -68,6 +72,7 @@ def collide(a, b):
 
     return True # 충돌발생
 
+<<<<<<< Updated upstream
 def collide_top(a, b):
 
     al,ab,ar,at=a.get_bb_top()
@@ -97,5 +102,18 @@ def handle_collisions():
                         print(f'{group} collide')
                         a.handle_collision(group,b)
                         b.handle_collision(group,a)
+=======
+
+
+def handle_collisions():
+    for group,pairs in collision_pairs.items():
+        for a in pairs[0]:
+            for b in pairs[1]:
+                if collide(a,b):
+                    print(f'{group} collide')
+                    a.handle_collision(group,b)
+                    b.handle_collision(group,a)
+
+>>>>>>> Stashed changes
     return None
 

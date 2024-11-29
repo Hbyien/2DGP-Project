@@ -244,7 +244,10 @@ class Knight:
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
         draw_rectangle(*self.get_bb_top())
+<<<<<<< Updated upstream
         draw_rectangle(*self.get_bb_bottom())
+=======
+>>>>>>> Stashed changes
 
     def slash_effect(self):
         slash_effect = Slash_Effect(self.x, self.y, self.face_dir*15)
@@ -254,6 +257,7 @@ class Knight:
 
 
     def get_bb(self):
+<<<<<<< Updated upstream
         return self.x - 30, self.y - 38, self.x + 30, self.y + 40
 
     def get_bb_top(self):   #머리 충돌 체크 위한거
@@ -262,6 +266,12 @@ class Knight:
     def get_bb_bottom(self): # 발 충돌체크 위한거
         return self.x - 30, self.y - 44, self.x + 30, self.y - 40
 
+=======
+        return self.x - 30, self.y - 45, self.x + 30, self.y + 30
+
+    def get_bb_top(self):
+        return self.x - 30, self.y +31, self.x + 30, self.y + 45
+>>>>>>> Stashed changes
 
     def handle_collision(self, group, other):
 
@@ -269,7 +279,7 @@ class Knight:
         if group == 'knight:wmonster':
             game_framework.quit()
 
-        if group == 'knight:coin':
+        if group == 'knight_top:coin':
             pass
 
         if group == 'knight_top:qblock':
