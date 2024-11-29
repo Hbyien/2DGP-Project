@@ -70,7 +70,7 @@ def init():
     game_world.add_collision_pair('knight_top:qblock', knight, qblock)
     game_world.add_collision_pair('knight:qblock', knight, qblock)
 
-
+    game_world.add_collision_pair('knight_bottom:qblock', knight, qblock)
     game_world.add_collision_pair('knight:coin', knight, None)
 
 

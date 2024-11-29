@@ -39,10 +39,14 @@ class Qblock:
 
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
+            if self.already_collision == False:
+                self.coin()
             self.already_collision = True
-            self.coin()
 
-        if group == 'knight_top:qblock':
+
+
+
+        if group == 'knight_bottom:qblock':
             pass
 
     def coin(self):

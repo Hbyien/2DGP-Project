@@ -85,6 +85,18 @@ def collide_top(a, b):
     if ab>bt : return False
 
     return True # 충돌발생
+def collide_bottom(a, b):
+
+    al,ab,ar,at=a.get_bb_bottom()
+    bl,bb,br,bt= b.get_bb()
+
+
+    if ar<bl: return False
+    if al>br: return False
+    if at<bb: return False
+    if ab>bt : return False
+
+    return True # 충돌발생
 
 def handle_collisions():
     for group,pairs in collision_pairs.items():
@@ -93,6 +105,13 @@ def handle_collisions():
                 for b in pairs[1]:
                     if collide_top(a, b):
                         print(f'{group} collide top')
+                        a.handle_collision(group, b)
+                        b.handle_collision(group, a)
+        if group == 'knight_bottom:qblock':
+            for a in pairs[0]:
+                for b in pairs[1]:
+                    if collide_bottom(a, b):
+                        print(f'{group} collide bottom')
                         a.handle_collision(group, b)
                         b.handle_collision(group, a)
         else:
@@ -105,14 +124,7 @@ def handle_collisions():
 
 
 
-def handle_collisions():
-    for group,pairs in collision_pairs.items():
-        for a in pairs[0]:
-            for b in pairs[1]:
-                if collide(a,b):
-                    print(f'{group} collide')
-                    a.handle_collision(group,b)
-                    b.handle_collision(group,a)
+
 
 
     return None

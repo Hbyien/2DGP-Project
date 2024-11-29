@@ -118,7 +118,7 @@ class Run:
 
 class Jump:
     is_Jump = False
-    velocity = 20
+    velocity = 10
     gravity = 5
     jump_frame = 0
 
@@ -126,10 +126,11 @@ class Jump:
     def enter(knight, e):
         #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
 
-            if not Jump.is_Jump:  # 점프 중이 아닐 때만 초기화
+            if not Jump.is_Jump : # 점프 중이 아닐 때만 초기화
                 knight.frame = 0
                 Jump.velocity = 10  # 점프 속도를 초기화
                 Jump.is_Jump = True
+                knight.bottom_collide = False
 
     @staticmethod
     def exit(knight, e):
@@ -137,6 +138,7 @@ class Jump:
 
     @staticmethod
     def do(knight):
+
         # 수직 이동: 점프 속도와 중력 적용
         knight.y += Jump.velocity ** 2 * 0.02 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
         Jump.velocity -= 20 * game_framework.frame_time
@@ -152,6 +154,7 @@ class Jump:
         if knight.jump_top_collide == True:
             Jump.velocity = -5
             knight.jump_top_collide = False
+
 
 
 
@@ -225,6 +228,7 @@ class Knight:
         
         self.jump_top_collide = False
         self.block_collide = False
+        self.bottom_collide = False
 
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -257,20 +261,13 @@ class Knight:
 
     def get_bb(self):
 
-        return self.x - 30, self.y - 38, self.x + 30, self.y + 40
+        return self.x - 30, self.y - 35, self.x + 30, self.y + 35
 
     def get_bb_top(self):   #머리 충돌 체크 위한거
-        return self.x - 30, self.y +41, self.x + 30, self.y + 45
+        return self.x - 30, self.y +40, self.x + 30, self.y + 47
 
     def get_bb_bottom(self): # 발 충돌체크 위한거
-        return self.x - 30, self.y - 44, self.x + 30, self.y - 40
-
-
-        return self.x - 30, self.y - 45, self.x + 30, self.y + 30
-
-    def get_bb_top(self):
-        return self.x - 30, self.y +31, self.x + 30, self.y + 45
-
+        return self.x - 30, self.y - 45, self.x + 30, self.y - 38
 
     def handle_collision(self, group, other):
 
@@ -285,5 +282,10 @@ class Knight:
             self.jump_top_collide = True
         if group == 'knight:qblock':
             self.block_collide = True
-            pass
+
+        if group == 'knight_bottom:qblock':
+            self.bottom_collide = True
+
         pass
+
+
