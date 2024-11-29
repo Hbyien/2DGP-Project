@@ -72,7 +72,7 @@ def collide(a, b):
 
     return True # 충돌발생
 
-<<<<<<< Updated upstream
+
 def collide_top(a, b):
 
     al,ab,ar,at=a.get_bb_top()
@@ -102,7 +102,7 @@ def handle_collisions():
                         print(f'{group} collide')
                         a.handle_collision(group,b)
                         b.handle_collision(group,a)
-=======
+
 
 
 def handle_collisions():
@@ -114,6 +114,6 @@ def handle_collisions():
                     a.handle_collision(group,b)
                     b.handle_collision(group,a)
 
->>>>>>> Stashed changes
+
     return None
 
