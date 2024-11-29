@@ -3,6 +3,9 @@ import game_world
 
 from pico2d import *
 
+from coin import Coin
+
+
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 10.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -18,6 +21,8 @@ class Qblock:
 
         self.already_collision = False
 
+
+
     def update(self):
         pass
     def draw(self):
@@ -27,14 +32,21 @@ class Qblock:
         if self.already_collision:
             self.block2_image.draw(self.x, self.y, 50, 50)
 
+
+
     def get_bb(self):
         return self.x-30, self.y-30, self.x+30, self.y+30
 
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
             self.already_collision = True
+            self.coin()
+
         if group == 'knight_top:qblock':
             pass
 
-
+    def coin(self):
+        coin = Coin(self.x, self.y)
+        game_world.add_object(coin, 1)
+        game_world.add_collision_pair('knight:coin', None, coin)
 

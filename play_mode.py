@@ -56,8 +56,8 @@ def init():
     fly = Fly()
     game_world.add_object(fly, 1)
 
-    coin = Coin()
-    game_world.add_object(coin, 1)
+    #coin = Coin()
+    #game_world.add_object(coin, 1)
 
     qblock = Qblock()
     game_world.add_object(qblock, 1)
@@ -66,11 +66,12 @@ def init():
     game_world.add_collision_pair('slash_effect:wmonster',None,wmonster)
     game_world.add_collision_pair('slash_effect:fly',None,fly)
 
-    game_world.add_collision_pair('knight:coin', knight, coin)
+    #game_world.add_collision_pair('knight:coin', knight, coin)
     game_world.add_collision_pair('knight_top:qblock', knight, qblock)
     game_world.add_collision_pair('knight:qblock', knight, qblock)
 
-    game_world.add_collision_pair('knight_top:coin', knight, coin)
+
+    game_world.add_collision_pair('knight:coin', knight, None)
 
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)

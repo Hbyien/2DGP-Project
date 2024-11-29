@@ -119,7 +119,7 @@ class Run:
 class Jump:
     is_Jump = False
     velocity = 20
-    gravity = 1
+    gravity = 5
     jump_frame = 0
 
     @staticmethod
@@ -278,7 +278,7 @@ class Knight:
         if group == 'knight:wmonster':
             game_framework.quit()
 
-        if group == 'knight_top:coin':
+        if group == 'knight:coin':
             pass
 
         if group == 'knight_top:qblock':
