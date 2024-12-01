@@ -4,6 +4,9 @@ import game_framework
 import game_world
 import title_mode
 
+import server
+
+
 from knight import Knight
 from stage import Stage
 from rhythm_base import Rhythm_Base
@@ -29,13 +32,13 @@ def handle_events():
 
         else:
             if event.type in (SDL_KEYDOWN, SDL_KEYUP):
-                knight.handle_event(event)
+                server.knight.handle_event(event)
 
 def init():
 
-    global knight
-    #stage = Stage()
-    #game_world.add_object(stage, 0)
+
+    server.stage = Stage()
+    game_world.add_object(server.stage, 0)
 
     bounce = Bounce()
     game_world.add_object(bounce, 1)
@@ -44,8 +47,8 @@ def init():
     rhythm_base = Rhythm_Base()
     game_world.add_object(rhythm_base, 0)
 
-    knight = Knight()
-    game_world.add_object(knight, 1)
+    server.knight = Knight()
+    game_world.add_object(server.knight, 1)
 
     rhythm_bar = Rhythm_Bar()
     game_world.add_object(rhythm_bar, 2)
@@ -67,11 +70,11 @@ def init():
     game_world.add_collision_pair('slash_effect:fly',None,fly)
 
     #game_world.add_collision_pair('knight:coin', knight, coin)
-    game_world.add_collision_pair('knight_top:qblock', knight, qblock)
-    game_world.add_collision_pair('knight:qblock', knight, qblock)
+    game_world.add_collision_pair('knight_top:qblock', server.knight, qblock)
+    game_world.add_collision_pair('knight:qblock', server.knight, qblock)
 
-    game_world.add_collision_pair('knight_bottom:qblock', knight, qblock)
-    game_world.add_collision_pair('knight:coin', knight, None)
+    game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
+    game_world.add_collision_pair('knight:coin', server.knight, None)
 
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)

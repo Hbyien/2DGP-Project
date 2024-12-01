@@ -1,5 +1,5 @@
 
-from pico2d import load_image, clamp, draw_rectangle
+from pico2d import load_image, clamp, draw_rectangle, get_canvas_width, get_canvas_height
 
 import game_world
 import game_framework
@@ -8,6 +8,9 @@ from state_machine import (StateMachine, space_down, right_down, right_up, left_
                            start_event, c_down)
 
 import rhythm_bar
+import server
+from server import stage
+
 
 BOTTOM = 250
 
@@ -63,9 +66,9 @@ class Idle:
             Jump.draw(knight)
         else:
             if knight.face_dir == 1:
-                knight.character_idle.clip_draw(int(knight.frame) * 94, 0, 94, 101, knight.x, knight.y)
+                knight.character_idle.clip_draw(int(knight.frame) * 94, 0, 94, 101, knight.sx, knight.sy)
             else:
-                knight.character_idle.clip_composite_draw(int(knight.frame) * 94, 0, 94, 101, 0, 'h', knight.x, knight.y, 100, 100)
+                knight.character_idle.clip_composite_draw(int(knight.frame) * 94, 0, 94, 101, 0, 'h', knight.sx, knight.sy, 100, 100)
 
 
 class Run:
@@ -97,7 +100,8 @@ class Run:
             Jump.do(knight)
         else:
             knight.x += knight.dir* RUN_SPEED_PPS * game_framework.frame_time
-            knight.x = clamp(10,knight.x, 1190)
+            #knight.x = clamp(10,knight.x, 1190)
+
             knight.frame = (knight.frame + FRAMES_PER_ACTION*ACTION_PER_TIME*game_framework.frame_time) % 6
 
 
@@ -111,15 +115,15 @@ class Run:
             Jump.draw(knight)
         else:
             if knight.face_dir == 1:
-                knight.character_walk.clip_draw(int(knight.frame) * 96, 0, 96, 94, knight.x, knight.y)
+                knight.character_walk.clip_draw(int(knight.frame) * 96, 0, 96, 94, knight.sx, knight.sy)
             else:
-                knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.x, knight.y, 100, 100)
+                knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.sx, knight.sy, 100, 100)
 
 
 class Jump:
     is_Jump = False
     velocity = 10
-    gravity = 5
+    gravity = 2
     jump_frame = 0
 
     @staticmethod
@@ -149,7 +153,7 @@ class Jump:
         else:
             # 수평 이동: 점프 시에도 이동 방향 유지
             knight.x += knight.dir * RUN_SPEED_PPS * 0.5 * game_framework.frame_time  # x 이동 거리를 줄임
-            knight.x = clamp(10, knight.x, 1190)  # 화면 경계 안으로 제한
+            #knight.x = clamp(10, knight.x, 1190)  # 화면 경계 안으로 제한
 
         if knight.jump_top_collide == True:
             Jump.velocity = -5
@@ -173,9 +177,9 @@ class Jump:
 
         # 방향에 따라 점프 애니메이션 출력
         if knight.face_dir == 1:
-            knight.character_jump.clip_draw(Jump.jump_frame * 96, 0, 96, 94, knight.x, knight.y)
+            knight.character_jump.clip_draw(Jump.jump_frame * 96, 0, 96, 94, knight.sx, knight.sy)
         else:
-            knight.character_jump.clip_composite_draw(Jump.jump_frame * 96, 0, 96, 94, 0, 'h', knight.x, knight.y, 100, 100)
+            knight.character_jump.clip_composite_draw(Jump.jump_frame * 96, 0, 96, 94, 0, 'h', knight.sx, knight.sy, 100, 100)
 
 
 class Slash:
@@ -215,10 +219,12 @@ class Slash:
 
 class Knight:
     def __init__(self):
-        self.x, self.y = 400, BOTTOM
+        #self.x, self.y = 400, BOTTOM
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
+
+        self.sx, self.sy = 0, 0
 
         self.character_walk = load_image('image//walk.png')
         self.character_idle = load_image('image//idle.png')
@@ -238,8 +244,15 @@ class Knight:
 
         })
 
+        #self.x, self.y = get_canvas_width() / 2, get_canvas_height() / 2
+
+        self.x = 400
+        self.y = server.stage.h / 2 -115
+
     def update(self):
         self.state_machine.update()
+        self.x = clamp(25.0, self.x, server.stage.w - 25.0)
+        self.y = clamp(25.0, self.y, server.stage.h - 25.0)
 
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
@@ -251,9 +264,11 @@ class Knight:
 
         draw_rectangle(*self.get_bb_bottom())
 
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
 
     def slash_effect(self):
-        slash_effect = Slash_Effect(self.x, self.y, self.face_dir*15)
+        slash_effect = Slash_Effect(self.sx, self.sy, self.face_dir*15)
         game_world.add_object(slash_effect, 1)
         game_world.add_collision_pair('slash_effect:wmonster', slash_effect, None)
         game_world.add_collision_pair('slash_effect:fly', slash_effect, None)
@@ -261,13 +276,13 @@ class Knight:
 
     def get_bb(self):
 
-        return self.x - 30, self.y - 35, self.x + 30, self.y + 35
+        return self.sx - 30, self.sy - 35, self.sx + 30, self.sy + 35
 
     def get_bb_top(self):   #머리 충돌 체크 위한거
-        return self.x - 30, self.y +40, self.x + 30, self.y + 47
+        return self.sx - 30, self.sy +40, self.sx + 30, self.sy + 47
 
     def get_bb_bottom(self): # 발 충돌체크 위한거
-        return self.x - 30, self.y - 45, self.x + 30, self.y - 38
+        return self.sx - 30, self.sy - 45, self.sx + 30, self.sy - 38
 
     def handle_collision(self, group, other):
 
