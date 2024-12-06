@@ -1,6 +1,6 @@
 
 from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDL_KEYUP, \
-    SDLK_RIGHT, SDLK_LEFT, SDLK_c
+    SDLK_RIGHT, SDLK_LEFT, SDLK_c, SDLK_f
 
 
 def start_event(e):
@@ -23,6 +23,10 @@ def left_up(e):
 
 def c_down(e):
     return e[0] == 'INPUT' and  e[1].type == SDL_KEYDOWN and e[1].key == SDLK_c
+
+def f_down(e):
+    return e[0] == 'INPUT' and  e[1].type == SDL_KEYDOWN and e[1].key == SDLK_f
+
 
 def time_out(e):
     return e[0] == 'TIME_OUT'

@@ -1,11 +1,13 @@
 
 from pico2d import load_image, clamp, draw_rectangle, get_canvas_width, get_canvas_height
 
+import time
+
 import game_world
 import game_framework
 from slash_effect import Slash_Effect
-from state_machine import (StateMachine, space_down, right_down, right_up, left_down, left_up,
-                           start_event, c_down)
+from fire_ball import Fire_Ball
+from state_machine import (StateMachine, space_down, right_down, right_up, left_down, left_up, start_event, c_down, f_down)
 
 import rhythm_bar
 import server
@@ -32,6 +34,8 @@ class Idle:
     def enter(knight, e):
         if Slash.is_Slash:
             return
+        if Fire.is_Fire:
+            return
         elif Jump.is_Jump:
             return
 
@@ -44,6 +48,8 @@ class Idle:
     def exit(knight, e):
         if c_down(e):
             Slash.enter(knight, e)
+        elif f_down(e):
+            Fire.enter(knight,e)
 
         elif space_down(e):
             Jump.enter(knight, e)
@@ -53,6 +59,8 @@ class Idle:
     def do(knight):
         if Slash.is_Slash:
             Slash.do(knight)
+        elif Fire.is_Fire:
+            Fire.do(knight)
         elif Jump.is_Jump:
             Jump.do(knight)
         else:
@@ -62,6 +70,8 @@ class Idle:
     def draw(knight):
         if Slash.is_Slash:
             Slash.draw(knight)
+        elif Fire.is_Fire:
+            Fire.draw(knight)
         elif Jump.is_Jump:
             Jump.draw(knight)
         else:
@@ -213,9 +223,46 @@ class Slash:
     @staticmethod
     def draw(knight):
         if knight.face_dir == 1:
-            knight.character_slash.clip_draw(int(knight.frame) * 93, 0, 93, 100, knight.x, knight.y)
+            knight.character_slash.clip_draw(int(knight.frame) * 93, 0, 93, 100, knight.sx, knight.sy)
         else:
-            knight.character_slash.clip_composite_draw(int(knight.frame) * 93, 0, 93, 100, 0, 'h', knight.x, knight.y, 100, 100)
+            knight.character_slash.clip_composite_draw(int(knight.frame) * 93, 0, 93, 100, 0, 'h', knight.sx, knight.sy, 100, 100)
+
+class Fire:
+    is_Fire = False
+
+    @staticmethod
+    def enter(knight, e):
+        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+            if not Slash.is_Slash:
+                knight.frame = 0
+
+                if right_down(e) or left_down(e):
+                    knight.dir, knight.face_dir = 1, 1
+                elif left_down(e) or right_up(e):
+                    knight.dir, knight.face_dir = -1, -1
+
+                Fire.is_Fire = True
+            knight.fire_ball()
+
+
+    @staticmethod
+    def exit(knight, e):
+       pass
+
+    @staticmethod
+    def do(knight):
+
+        knight.frame = (knight.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
+        if knight.frame >= 2:
+            Slash.is_Slash = False
+    @staticmethod
+    def draw(knight):
+        if knight.face_dir == 1:
+            knight.character_slash.clip_draw(int(knight.frame) * 93, 0, 93, 100, knight.sx, knight.sy)
+        else:
+            knight.character_slash.clip_composite_draw(int(knight.frame) * 93, 0, 93, 100, 0, 'h', knight.sx, knight.sy,
+                                                       100, 100)
+
 
 class Knight:
     def __init__(self):
@@ -239,8 +286,8 @@ class Knight:
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions({
-            Idle: { right_down: Run, left_down: Run, left_up :Run, right_up: Run, space_down : Idle, c_down : Idle},
-            Run : {right_down:Idle, left_down:Idle, right_up:Idle, left_up:Idle, space_down : Run, c_down : Run}
+            Idle: { right_down: Run, left_down: Run, left_up :Run, right_up: Run, space_down : Idle, c_down : Idle , f_down: Idle},
+            Run : {right_down:Idle, left_down:Idle, right_up:Idle, left_up:Idle, space_down : Run, c_down : Run, f_down: Run}
 
         })
 
@@ -250,10 +297,28 @@ class Knight:
         self.y = server.stage.h / 2 -115
 
         self.coin_count = 0
+
+        self.knight_fire = False
+        self.current_time = 0.0
     def update(self):
         self.state_machine.update()
         self.x = clamp(25.0, self.x, server.stage.w - 25.0)
         self.y = clamp(25.0, self.y, server.stage.h - 25.0)
+        if self.knight_fire == True:
+            if self.current_time ==0:
+                self.current_time = time.time()
+
+            self.character_walk = load_image('image//walk_fire.png')
+            self.character_idle = load_image('image//idle_fire.png')
+            self.character_jump = load_image('image//jump_fire.png')
+            self.character_slash = load_image('image//slash_fire.png')
+            if time.time() - self.current_time >= 3.0:
+                self.character_walk = load_image('image//walk.png')
+                self.character_idle = load_image('image//idle.png')
+                self.character_jump = load_image('image//jump.png')
+                self.character_slash = load_image('image//slash.png')
+                self.knight_fire = False
+
 
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
@@ -273,6 +338,12 @@ class Knight:
         game_world.add_object(slash_effect, 1)
         game_world.add_collision_pair('slash_effect:wmonster', slash_effect, None)
         game_world.add_collision_pair('slash_effect:fly', slash_effect, None)
+
+    def fire_ball(self):
+        fire_ball = Fire_Ball(self.sx, self.sy, self.face_dir*15)
+        game_world.add_object(fire_ball, 1)
+        #game_world.add_collision_pair('slash_effect:wmonster', slash_effect, None)
+        #game_world.add_collision_pair('slash_effect:fly', slash_effect, None)
 
 
     def get_bb(self):
@@ -298,6 +369,7 @@ class Knight:
             pass
 
         if group == 'knight:flower':
+            self.knight_fire = True
             pass
 
         if group == 'knight_top:qblock':

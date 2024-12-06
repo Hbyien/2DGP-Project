@@ -1,6 +1,6 @@
 import game_framework
 import game_world
-
+import random
 from pico2d import *
 
 from coin import Coin
@@ -48,10 +48,9 @@ class Qblock:
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
             if self.already_collision == False:
+                #random.choice([self.coin, self.flower, self.mushroom])()
                 self.flower()
             self.already_collision = True
-
-
 
 
         if group == 'knight_bottom:qblock':
