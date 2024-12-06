@@ -4,7 +4,7 @@ import server
 
 class Stage:
     def __init__(self):
-        self.image = load_image('image//stage1.png')
+        self.image = load_image('image//stage_one.png')
         self.w, self.h = self.image.w, self.image.h
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
