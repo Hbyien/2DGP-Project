@@ -34,5 +34,5 @@ class Slash_Effect:
         return self.x - 40, self.y - 40, self.x + 40, self.y + 40
 
     def handle_collision(self, group, other):
-        if group == 'slash_effect:wmonster':
+        if group == 'slash_effect:wmonster' or group == 'slash_effect_fly':
             game_world.remove_object(self)
