@@ -248,6 +248,7 @@ class Knight:
 
         self.x = 400
         self.y = server.stage.h / 2 -115
+        #.
 
     def update(self):
         self.state_machine.update()
