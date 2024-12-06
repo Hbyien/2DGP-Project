@@ -294,6 +294,12 @@ class Knight:
         if group == 'knight:coin':
             pass
 
+        if group == 'knight:mushroom':
+            pass
+
+        if group == 'knight:flower':
+            pass
+
         if group == 'knight_top:qblock':
 
             self.jump_top_collide = True

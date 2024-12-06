@@ -106,10 +106,7 @@ def handle_collisions():
                     print(f'{group} collide top')
                     a.handle_collision(group, b)
                     b.handle_collision(group, a)
-                elif group == 'knight:coin' and collide(a, b):
-                    print(f'{group} collide')
-                    a.handle_collision(group, b)
-                    b.handle_collision(group, a)
+
                 elif collide(a, b):
                     print(f'{group} collide')
                     a.handle_collision(group, b)

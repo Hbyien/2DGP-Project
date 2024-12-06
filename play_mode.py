@@ -75,7 +75,10 @@ def init():
     game_world.add_collision_pair('knight:qblock', server.knight, qblock)
 
     game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
+
     game_world.add_collision_pair('knight:coin', server.knight, None)
+    game_world.add_collision_pair('knight:mushroom', server.knight, None)
+    game_world.add_collision_pair('knight:flower', server.knight, None)
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
     #game_world.add_collision_pair('knight: wmonster', knight,  None)

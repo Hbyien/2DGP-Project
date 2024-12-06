@@ -4,6 +4,8 @@ import game_world
 from pico2d import *
 
 from coin import Coin
+from mushroom import Mushroom
+from flower import Flower
 import server
 
 PIXEL_PER_METER = (10.0 / 0.3)
@@ -46,7 +48,7 @@ class Qblock:
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
             if self.already_collision == False:
-                self.coin()
+                self.flower()
             self.already_collision = True
 
 
@@ -61,3 +63,18 @@ class Qblock:
         coin = Coin(self.sx, self.sy)
         game_world.add_object(coin, 1)
         game_world.add_collision_pair('knight:coin', None, coin)
+
+    def mushroom(self):
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
+        mushroom = Mushroom(self.sx, self.sy)
+        game_world.add_object(mushroom, 1)
+        game_world.add_collision_pair('knight:mushroom', None, mushroom)
+
+    def flower(self):
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
+        flower = Flower(self.sx, self.sy)
+        game_world.add_object(flower, 1)
+        game_world.add_collision_pair('knight:flower', None, flower)
+
