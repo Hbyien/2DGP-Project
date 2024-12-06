@@ -4,7 +4,6 @@ import game_world
 from pico2d import *
 
 from coin import Coin
-
 import server
 
 PIXEL_PER_METER = (10.0 / 0.3)
@@ -29,11 +28,13 @@ class Qblock:
     def draw(self):
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
+
+
         self.block1_image.draw(self.sx, self.sy, 50, 50)
         draw_rectangle(*self.get_bb())
 
         if self.already_collision:
-            self.block2_image.draw(self.sx, self.sy - server.stage.window_bottom, 50, 50)
+            self.block2_image.draw(self.sx, self.sy, 50, 50)
 
 
 
@@ -55,7 +56,8 @@ class Qblock:
             pass
 
     def coin(self):
-        coin = Coin(self.x, self.y)
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
+        coin = Coin(self.sx, self.sy)
         game_world.add_object(coin, 1)
         game_world.add_collision_pair('knight:coin', None, coin)
-

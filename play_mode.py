@@ -1,12 +1,13 @@
 from pico2d import *
 
+
 import game_framework
 import game_world
 import title_mode
 
 import server
 
-
+from coin import Coin
 from knight import Knight
 from stage import Stage
 from rhythm_base import Rhythm_Base
@@ -75,7 +76,6 @@ def init():
 
     game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
     game_world.add_collision_pair('knight:coin', server.knight, None)
-
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
     #game_world.add_collision_pair('knight: wmonster', knight,  None)

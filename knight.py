@@ -10,7 +10,7 @@ from state_machine import (StateMachine, space_down, right_down, right_up, left_
 import rhythm_bar
 import server
 from server import stage
-
+from qblock import Qblock
 
 BOTTOM = 250
 
@@ -249,7 +249,7 @@ class Knight:
         self.x = 400
         self.y = server.stage.h / 2 -115
 
-
+        self.coin_count = 0
     def update(self):
         self.state_machine.update()
         self.x = clamp(25.0, self.x, server.stage.w - 25.0)
@@ -295,6 +295,7 @@ class Knight:
             pass
 
         if group == 'knight_top:qblock':
+
             self.jump_top_collide = True
         if group == 'knight:qblock':
             self.block_collide = True

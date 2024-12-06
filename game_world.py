@@ -99,33 +99,27 @@ def collide_bottom(a, b):
     return True # 충돌발생
 
 def handle_collisions():
-    for group,pairs in collision_pairs.items():
-        if group == 'knight_top:qblock':
-            for a in pairs[0]:
-                for b in pairs[1]:
-                    if collide_top(a, b):
-                        print(f'{group} collide top')
-                        a.handle_collision(group, b)
-                        b.handle_collision(group, a)
-        if group == 'knight_bottom:qblock':
-            for a in pairs[0]:
-                for b in pairs[1]:
-                    if collide_bottom(a, b):
-                        print(f'{group} collide bottom')
-                        a.handle_collision(group, b)
-                        b.handle_collision(group, a)
-        else:
-            for a in pairs[0]:
-                for b in pairs[1]:
-                    if collide(a,b):
-                        print(f'{group} collide')
-                        a.handle_collision(group,b)
-                        b.handle_collision(group,a)
+    for group, pairs in collision_pairs.items():
+        for a in pairs[0]:
+            for b in pairs[1]:
+                if group == 'knight_top:qblock' and collide_top(a, b):
+                    print(f'{group} collide top')
+                    a.handle_collision(group, b)
+                    b.handle_collision(group, a)
+                elif group == 'knight:coin' and collide(a, b):
+                    print(f'{group} collide')
+                    a.handle_collision(group, b)
+                    b.handle_collision(group, a)
+                elif collide(a, b):
+                    print(f'{group} collide')
+                    a.handle_collision(group, b)
+                    b.handle_collision(group, a)
 
 
 
 
 
 
-    return None
+
+
 
