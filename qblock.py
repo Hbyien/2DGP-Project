@@ -5,6 +5,7 @@ from pico2d import *
 
 from coin import Coin
 
+import server
 
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 10.0
@@ -26,16 +27,20 @@ class Qblock:
     def update(self):
         pass
     def draw(self):
-        self.block1_image.draw(self.x, self.y, 50, 50)
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
+        self.block1_image.draw(self.sx, self.sy, 50, 50)
         draw_rectangle(*self.get_bb())
 
         if self.already_collision:
-            self.block2_image.draw(self.x, self.y, 50, 50)
+            self.block2_image.draw(self.sx, self.sy - server.stage.window_bottom, 50, 50)
 
 
 
     def get_bb(self):
-        return self.x-30, self.y-30, self.x+30, self.y+30
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
+        return self.sx-30, self.sy-30, self.sx+30, self.sy+30
 
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
