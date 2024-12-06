@@ -16,7 +16,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 class Qblock:
     def __init__(self):
-        self.x, self.y = 400, 350
+        self.x, self.y = 400, 850
         self.block1_image = load_image('objects//qblock1.png')
         self.block2_image = load_image('objects//qblock2.png')
 
