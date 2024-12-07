@@ -15,8 +15,8 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 class Qblock:
-    def __init__(self):
-        self.x, self.y = 400, 450
+    def __init__(self, x = None, y = None):
+        self.x, self.y = x,y
         self.block1_image = load_image('objects//qblock1.png')
         self.block2_image = load_image('objects//qblock2.png')
 
@@ -48,32 +48,35 @@ class Qblock:
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
             if self.already_collision == False:
-                #random.choice([self.coin, self.flower, self.mushroom])()
-                self.flower()
+                random.choice([self.coin, self.flower, self.mushroom])()
+
+
             self.already_collision = True
 
 
         if group == 'knight_bottom:qblock':
             pass
+        if group == 'knight:qblock':
+            pass
 
     def coin(self):
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
-        coin = Coin(self.sx, self.sy)
+        coin = Coin(self.x, self.y)
         game_world.add_object(coin, 1)
         game_world.add_collision_pair('knight:coin', None, coin)
 
     def mushroom(self):
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
-        mushroom = Mushroom(self.sx, self.sy)
+        mushroom = Mushroom(self.x, self.y)
         game_world.add_object(mushroom, 1)
         game_world.add_collision_pair('knight:mushroom', None, mushroom)
 
     def flower(self):
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
-        flower = Flower(self.sx, self.sy)
+        flower = Flower(self.x, self.y)
         game_world.add_object(flower, 1)
         game_world.add_collision_pair('knight:flower', None, flower)
 

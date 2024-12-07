@@ -3,6 +3,8 @@ import random
 import game_framework
 import game_world
 
+import server
+
 from pico2d import *
 
 PIXEL_PER_METER = (10.0 / 0.3)
@@ -17,12 +19,12 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4.0
 
 
-Bottom = 250
+Bottom = 280
 class Wmonster:
     images = None
 
     def __init__(self):
-        self.x, self.y = 1000, Bottom
+        self.x, self.y = 500, 280
         self.walk_image = load_image('monsters//wmonster_walk.png')
         self.die_image = load_image('monsters//wmonster_die.png')
         self.frame = 0
@@ -34,6 +36,8 @@ class Wmonster:
         self.die_frame_time = 0.0
         self.extra_time = 1.0
         self.is_extra_time_active = False
+
+        self.sx, self.sy = 0, 0
 
     def update(self):
         if self.dying:
@@ -64,17 +68,21 @@ class Wmonster:
         pass
 
     def draw(self):
+
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
+
         if self.dying:  # 죽는 상태에서는 die_image를 그림
             if self.die_frame < 5:  # die_image의 프레임 재생
                 if self.dir == 1:
-                    self.die_image.clip_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, self.x, self.y)
+                    self.die_image.clip_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, self.sx, self.sy)
                 elif self.dir == -1:
-                    self.die_image.clip_composite_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, 0, 'h', self.x, self.y, 90, 90 )
+                    self.die_image.clip_composite_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, 0, 'h', self.sx, self.sy, 90, 90 )
         else :
             if self.dir==-1:
-                self.walk_image.clip_composite_draw(int(self.frame) * self.frame_width, 0, self.frame_width, self.frame_height,0, 'h', self.x, self.y, 90, 90)
+                self.walk_image.clip_composite_draw(int(self.frame) * self.frame_width, 0, self.frame_width, self.frame_height,0, 'h', self.sx, self.sy, 90, 90)
             elif self.dir ==1:
-                self.walk_image.clip_draw(int(self.frame)* self.frame_width, 0, self.frame_width, self.frame_height, self.x, self.y)
+                self.walk_image.clip_draw(int(self.frame)* self.frame_width, 0, self.frame_width, self.frame_height, self.sx, self.sy)
 
             draw_rectangle(*self.get_bb())
 
@@ -83,7 +91,7 @@ class Wmonster:
 
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.sx - 50, self.sy - 50, self.sx + 50, self.sy + 50
 
 
 

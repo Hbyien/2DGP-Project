@@ -63,6 +63,12 @@ class Idle:
             Fire.do(knight)
         elif Jump.is_Jump:
             Jump.do(knight)
+        elif knight.block_collide == True:
+            if knight.dir ==1:
+                knight.x-=5
+            elif knight.dir == -1:
+                knight.x +=5
+            knight.block_collide = False
         else:
             knight.frame = (knight.frame + FRAMES_PER_ACTION*ACTION_PER_TIME*game_framework.frame_time) % 4
 
@@ -104,7 +110,7 @@ class Run:
 
         elif space_down(e):
             Jump.enter(knight, e)
-        pass
+
 
     @staticmethod
     def do(knight):
@@ -114,6 +120,13 @@ class Run:
             Fire.do(knight)
         elif Jump.is_Jump:
             Jump.do(knight)
+
+        elif knight.block_collide == True:
+            if knight.dir ==1:
+                knight.x-=5
+            elif knight.dir == -1:
+                knight.x +=5
+            knight.block_collide = False
         else:
             knight.x += knight.dir* RUN_SPEED_PPS * game_framework.frame_time
             #knight.x = clamp(10,knight.x, 1190)
@@ -167,6 +180,10 @@ class Jump:
 
 
         if knight.block_collide == True:
+            if knight.dir ==1:
+                knight.x-=5
+            elif knight.dir == -1:
+                knight.x +=5
             knight.block_collide = False
         else:
             # 수평 이동: 점프 시에도 이동 방향 유지
@@ -333,6 +350,8 @@ class Knight:
         self.bottom_collide = False
         self.bottom_collide_y = 0
 
+
+
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
 
@@ -364,10 +383,10 @@ class Knight:
         return self.sx - 30, self.sy - 35, self.sx + 30, self.sy + 35
 
     def get_bb_top(self):   #머리 충돌 체크 위한거
-        return self.sx - 30, self.sy +40, self.sx + 30, self.sy + 47
+        return self.sx - 25, self.sy +40, self.sx + 25, self.sy + 47
 
     def get_bb_bottom(self): # 발 충돌체크 위한거
-        return self.sx - 30, self.sy - 45, self.sx + 30, self.sy - 38
+        return self.sx - 25, self.sy - 45, self.sx + 25, self.sy - 38
 
     def handle_collision(self, group, other):
 
@@ -391,8 +410,13 @@ class Knight:
         if group == 'knight:qblock':
             self.block_collide = True
 
+
         if group == 'knight_bottom:qblock':
             self.bottom_collide = True
+            self.bottom_collide_y = self.sy
+
+        if group == 'knight:stage':
+            self.block_collide = True
 
         if group == 'knight_bottom:stage':
             self.bottom_collide = True

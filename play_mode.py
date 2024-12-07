@@ -64,8 +64,19 @@ def init():
     #coin = Coin()
     #game_world.add_object(coin, 1)
 
-    qblock = Qblock()
-    game_world.add_object(qblock, 1)
+    coordinates = [(842, 430), (1098, 430), (1198, 430), (1148, 650), (4008, 430), (4827, 650), (5440, 430),
+                   (5592, 430), (5745, 430), (5592, 650),(6617, 650),(6668, 650), (8710, 430) ]
+
+    # 리스트를 사용하여 Qblock 생성 및 추가
+    for x, y in coordinates:
+        qblock = Qblock(x, y)
+        game_world.add_object(qblock, 1)
+        game_world.add_collision_pair('knight_top:qblock', server.knight, qblock)
+        game_world.add_collision_pair('knight:qblock', server.knight, qblock)
+        game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
+
+
+
 
 
     game_world.add_collision_pair('slash_effect:wmonster',None,wmonster)
@@ -75,16 +86,14 @@ def init():
     game_world.add_collision_pair('fire_ball:fly', None, fly)
 
     #game_world.add_collision_pair('knight:coin', knight, coin)
-    game_world.add_collision_pair('knight_top:qblock', server.knight, qblock)
-    game_world.add_collision_pair('knight:qblock', server.knight, qblock)
 
-    #game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
 
     game_world.add_collision_pair('knight:coin', server.knight, None)
     game_world.add_collision_pair('knight:mushroom', server.knight, None)
     game_world.add_collision_pair('knight:flower', server.knight, None)
 
     game_world.add_collision_pair('knight_bottom:stage', server.knight, server.stage)
+    game_world.add_collision_pair('knight:stage', server.knight, server.stage)
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
     #game_world.add_collision_pair('knight: wmonster', knight,  None)

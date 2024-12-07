@@ -9,16 +9,15 @@ from pico2d import *
 class Flower:
     flower_image = None
 
-    def __init__(self, x=400, y=300):
+    def __init__(self, x,y):
         if Flower.flower_image == None:
             self.flower_image = load_image('objects//flower.png')
-        self.x, self.y = x-100, y -100
+        self.x, self.y = x, y +50
 
     def update(self):
         pass
     def draw(self):
-        self.sx = self.x - server.stage.window_left
-        self.sy = self.y - server.stage.window_bottom
+
         self.flower_image.draw(self.sx, self.sy, 40, 50)
         draw_rectangle(*self.get_bb())
 

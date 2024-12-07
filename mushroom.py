@@ -9,7 +9,7 @@ from pico2d import *
 class Mushroom:
     mushroom_image = None
 
-    def __init__(self, x=400, y=300):
+    def __init__(self, x, y):
         if Mushroom.mushroom_image == None:
             self.mushroom_image = load_image('objects//mushroom.png')
         self.x, self.y = x, y +50

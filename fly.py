@@ -4,6 +4,7 @@ import game_framework
 import game_world
 
 from pico2d import *
+import server
 
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 10.0
@@ -35,6 +36,8 @@ class Fly:
         self.extra_time = 1.0
         self.is_extra_time_active = False
 
+        self.sx, self.sy = 0, 0
+
     def update(self):
         if self.dying:
             self.die_frame_time += game_framework.frame_time
@@ -64,17 +67,19 @@ class Fly:
         pass
 
     def draw(self):
+        self.sx = self.x - server.stage.window_left
+        self.sy = self.y - server.stage.window_bottom
         if self.dying:  # 죽는 상태에서는 die_image를 그림
             if self.die_frame < 5:  # die_image의 프레임 재생
                 if self.dir == -1:
-                    self.die_image.clip_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, self.x, self.y)
+                    self.die_image.clip_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, self.sx, self.sy)
                 elif self.dir == 1:
-                    self.die_image.clip_composite_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, 0, 'h', self.x, self.y, 90, 90 )
+                    self.die_image.clip_composite_draw(self.die_frame * self.die_frame_width, 0, self.die_frame_width, self.die_frame_height, 0, 'h', self.sx, self.sy, 90, 90 )
         else :
             if self.dir==1:
-                self.idle_image.clip_composite_draw(int(self.frame) * self.frame_width, 0, self.frame_width, self.frame_height,0, 'h', self.x, self.y, 120, 120)
+                self.idle_image.clip_composite_draw(int(self.frame) * self.frame_width, 0, self.frame_width, self.frame_height,0, 'h', self.sx, self.sy, 120, 120)
             elif self.dir ==-1:
-                self.idle_image.clip_draw(int(self.frame)* self.frame_width, 0, self.frame_width, self.frame_height, self.x, self.y)
+                self.idle_image.clip_draw(int(self.frame)* self.frame_width, 0, self.frame_width, self.frame_height, self.sx, self.sy)
 
             draw_rectangle(*self.get_bb())
 
@@ -83,7 +88,7 @@ class Fly:
 
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.sx - 50, self.sy - 50, self.sx + 50, self.sy + 50
 
 
 

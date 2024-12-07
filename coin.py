@@ -18,10 +18,10 @@ FRAMES_PER_ACTION = 4.0
 class Coin:
     coin_image = None
 
-    def __init__(self, x=400, y=300):
+    def __init__(self, x, y):
         if Coin.coin_image == None:
             self.coin_image = load_image('objects//coin.png')
-        self.x, self.y = x-100, y - 100
+        self.x, self.y = x, y +50
         self.frame = 0
         self.frame_width, self.frame_height = 72 // 4, 17
         self.coin_count = 0
