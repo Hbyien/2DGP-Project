@@ -18,7 +18,7 @@ from wmonster import Wmonster
 from fly import Fly
 from coin import Coin
 from qblock import Qblock
-
+from brick import Brick
 
 def handle_events():
 
@@ -55,11 +55,9 @@ def init():
     rhythm_bar = Rhythm_Bar()
     game_world.add_object(rhythm_bar, 2)
 
-    wmonster = Wmonster()
-    game_world.add_object(wmonster, 1)
 
-    fly = Fly()
-    game_world.add_object(fly, 1)
+
+
 
     #coin = Coin()
     #game_world.add_object(coin, 1)
@@ -75,14 +73,37 @@ def init():
         game_world.add_collision_pair('knight:qblock', server.knight, qblock)
         game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
 
+    brick_location = [(1046,  430), (1146, 430), (1248, 430), (3957, 430), (4058, 430), (4825, 430), (5132, 430), (5182, 430),
+                      (4112, 650),(4162, 650), (4212, 650),(4262,650), (4312, 650),(4362, 650 ), (4162, 650), (4662, 650)
+                      , (6051, 430), (6612, 430), (6662, 430), (6206, 650), (6256, 650), (6306, 650),(6561, 650),(6717, 650 ),
+                      (8608, 430), (8658, 430), (8760, 430)]
+    for x, y in brick_location:
+        brick = Brick(x, y)
+        game_world.add_object(brick, 1)
+        game_world.add_collision_pair('knight_top:brick', server.knight, brick)
+        game_world.add_collision_pair('knight:brick', server.knight, brick)
+        game_world.add_collision_pair('knight_bottom:brick', server.knight, brick)
+
+    wmonster_location = [(800, 280), (4000, 280), (5350, 280), (6100, 280)]
+    for x, y in wmonster_location:
+        wmonster = Wmonster(x, y)
+        game_world.add_object(wmonster, 1)
+        game_world.add_collision_pair('slash_effect:wmonster', None, wmonster)
+        game_world.add_collision_pair('fire_ball:wmonster', None, wmonster)
+
+
+    fly_location = [(1715, 300), (2192, 350), (2684, 324), (8971, 324)]
+    for x, y in fly_location:
+        fly = Fly(x, y)
+        game_world.add_object(fly, 1)
 
 
 
 
-    game_world.add_collision_pair('slash_effect:wmonster',None,wmonster)
+
     game_world.add_collision_pair('slash_effect:fly',None,fly)
 
-    game_world.add_collision_pair('fire_ball:wmonster', None, wmonster)
+
     game_world.add_collision_pair('fire_ball:fly', None, fly)
 
     #game_world.add_collision_pair('knight:coin', knight, coin)
@@ -94,9 +115,8 @@ def init():
 
     game_world.add_collision_pair('knight_bottom:stage', server.knight, server.stage)
     game_world.add_collision_pair('knight:stage', server.knight, server.stage)
+    
 
-    #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
-    #game_world.add_collision_pair('knight: wmonster', knight,  None)
 
 
 

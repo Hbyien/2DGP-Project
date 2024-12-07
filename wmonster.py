@@ -23,8 +23,8 @@ Bottom = 280
 class Wmonster:
     images = None
 
-    def __init__(self):
-        self.x, self.y = 500, 280
+    def __init__(self, x= None, y = None):
+        self.x, self.y = x, y
         self.walk_image = load_image('monsters//wmonster_walk.png')
         self.die_image = load_image('monsters//wmonster_die.png')
         self.frame = 0
@@ -38,6 +38,7 @@ class Wmonster:
         self.is_extra_time_active = False
 
         self.sx, self.sy = 0, 0
+        self.start_x = x
 
     def update(self):
         if self.dying:
@@ -60,12 +61,12 @@ class Wmonster:
 
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
-        if self.x > 1100:
+         # 시작 위치 x
+        if self.x > self.start_x + 300:
             self.dir = -1
-        elif self.x < 800:
+        elif self.x < self.start_x - 300:
             self.dir = 1
-        self.x = clamp(800, self.x, 1200)
-        pass
+        self.x = clamp(self.start_x - 300, self.x, self.start_x + 300)
 
     def draw(self):
 
@@ -100,4 +101,4 @@ class Wmonster:
             self.dying  = True
 
         if group =='knight: wmonster':
-            game_framework.quit()
+            pass

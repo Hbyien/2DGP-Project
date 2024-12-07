@@ -43,7 +43,7 @@ class Qblock:
     def get_bb(self):
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
-        return self.sx-30, self.sy-30, self.sx+30, self.sy+30
+        return self.sx-25, self.sy-30, self.sx+25, self.sy+30
 
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':

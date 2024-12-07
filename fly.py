@@ -22,8 +22,8 @@ Bottom = 400
 class Fly:
     images = None
 
-    def __init__(self):
-        self.x, self.y = 1000, Bottom
+    def __init__(self, x = None, y = None):
+        self.x, self.y = x, y
         self.idle_image = load_image('monsters//fly_idle.png')
         self.die_image = load_image('monsters//fly_die.png')
         self.frame = 0
@@ -58,12 +58,12 @@ class Fly:
             return
 
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
-        if self.x > 1100:
+        self.y += RUN_SPEED_PPS * self.dir * game_framework.frame_time
+        if self.y > 600:
             self.dir = -1
-        elif self.x < 800:
+        elif self.y < 400:
             self.dir = 1
-        self.x = clamp(800, self.x, 1200)
+        self.y = clamp(200, self.y, 600)
         pass
 
     def draw(self):

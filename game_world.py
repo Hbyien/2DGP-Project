@@ -136,6 +136,12 @@ def handle_collisions():
                         print(f'{group} collide top')
                         a.handle_collision(group, b)
                         b.handle_collision(group, a)
+                elif group == 'knight_top:brick':
+
+                    if collide_top(a, b):
+                        print(f'{group} collide top')
+                        a.handle_collision(group, b)
+                        b.handle_collision(group, a)
                 elif group == 'knight_bottom:stage':
 
                     if collide_bottom_with_stage(a, b):

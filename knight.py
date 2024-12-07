@@ -13,6 +13,7 @@ import rhythm_bar
 import server
 from server import stage
 from qblock import Qblock
+from brick import Brick
 
 BOTTOM = 270
 
@@ -328,6 +329,9 @@ class Knight:
 
         self.knight_fire = False
         self.current_time = 0.0
+        self.life =3
+
+
     def update(self):
         self.state_machine.update()
         self.x = clamp(25.0, self.x, server.stage.w - 25.0)
@@ -392,9 +396,13 @@ class Knight:
 
 
         if group == 'knight:wmonster':
-            pass
+            self.life-= 1
+            self.x = 400
+            self.y = server.stage.h / 2 - 110
 
         if group == 'knight:coin':
+            self.coin_count += 1
+            print(self.coin_count)
             pass
 
         if group == 'knight:mushroom':
@@ -412,6 +420,17 @@ class Knight:
 
 
         if group == 'knight_bottom:qblock':
+            self.bottom_collide = True
+            self.bottom_collide_y = self.sy
+
+        if group == 'knight_top:brick':
+            self.jump_top_collide = True
+
+        if group == 'knight:brick':
+            self.block_collide = True
+
+
+        if group == 'knight_bottom:brick':
             self.bottom_collide = True
             self.bottom_collide_y = self.sy
 
