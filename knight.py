@@ -400,6 +400,11 @@ class Knight:
             self.x = 400
             self.y = server.stage.h / 2 - 110
 
+        if group == 'knight:fly':
+            self.life-= 1
+            self.x = 400
+            self.y = server.stage.h / 2 - 110
+
         if group == 'knight:coin':
             self.coin_count += 1
             print(self.coin_count)

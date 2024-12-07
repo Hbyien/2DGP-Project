@@ -90,21 +90,22 @@ def init():
         game_world.add_object(wmonster, 1)
         game_world.add_collision_pair('slash_effect:wmonster', None, wmonster)
         game_world.add_collision_pair('fire_ball:wmonster', None, wmonster)
+        game_world.add_collision_pair('knight:wmonster', server.knight, wmonster)
 
 
     fly_location = [(1715, 300), (2192, 350), (2684, 324), (8971, 324)]
     for x, y in fly_location:
         fly = Fly(x, y)
         game_world.add_object(fly, 1)
+        game_world.add_collision_pair('slash_effect:fly', None, fly)
+        game_world.add_collision_pair('fire_ball:fly', None, fly)
+        game_world.add_collision_pair('knight:fly', server.knight, fly)
 
 
 
 
 
-    game_world.add_collision_pair('slash_effect:fly',None,fly)
 
-
-    game_world.add_collision_pair('fire_ball:fly', None, fly)
 
     #game_world.add_collision_pair('knight:coin', knight, coin)
 
@@ -115,7 +116,8 @@ def init():
 
     game_world.add_collision_pair('knight_bottom:stage', server.knight, server.stage)
     game_world.add_collision_pair('knight:stage', server.knight, server.stage)
-    
+
+
 
 
 
