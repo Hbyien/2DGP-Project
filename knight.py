@@ -1,5 +1,5 @@
 
-from pico2d import load_image, clamp, draw_rectangle, get_canvas_width, get_canvas_height
+from pico2d import load_image, clamp, draw_rectangle, get_canvas_width, get_canvas_height, load_font
 
 import time
 
@@ -310,6 +310,8 @@ class Knight:
         self.heart = load_image('objects//heart.png')
         self.coin = load_image('objects//coin_1.png')
 
+        self.font = load_font('ENCR10B.TTF', 40)
+
         
         self.jump_top_collide = False
         self.block_collide = False
@@ -407,6 +409,7 @@ class Knight:
         self.heart_draw()
         self.coin_draw()
 
+
     def heart_draw(self):
         if self.life >= -29:
             self.heart.draw(130, 750, 80,80)
@@ -417,6 +420,7 @@ class Knight:
 
     def coin_draw(self):
         self.coin.draw(200, 750, 50, 50)
+        self.font.draw(250, 750, f'{self.coin_count}', (255, 255, 0))
     def slash_effect(self):
         slash_effect = Slash_Effect(self.sx, self.sy, self.face_dir*15)
         game_world.add_object(slash_effect, 1)
