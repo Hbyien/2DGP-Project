@@ -88,8 +88,8 @@ class Fly:
 
 
     def handle_collision(self, group, other):
-        if group == 'slash_effect:fly':
+        if group == 'slash_effect:fly' or group == 'fire_ball:fly':
             self.dying  = True
 
         if group =='knight: fly':
-            game_framework.quit()
+            pass

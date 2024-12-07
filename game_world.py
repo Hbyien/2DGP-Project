@@ -57,12 +57,9 @@ def clear():
 
 
 def collide(a, b):
-    if a == knight.Knight and b== coin.Coin:
-        al,ab,ar,at=a.get_bb_top()
-    else:
-        al, ab, ar, at = a.get_bb()
 
-    bl,bb,br,bt= b.get_bb()
+    al, ab, ar, at = a.get_bb()
+    bl, bb, br, bt = b.get_bb()
 
 
     if ar<bl: return False
@@ -85,32 +82,46 @@ def collide_top(a, b):
     if ab>bt : return False
 
     return True # 충돌발생
-def collide_bottom(a, b):
+def collide_bottom_with_stage(a, b):
 
     al,ab,ar,at=a.get_bb_bottom()
-    bl,bb,br,bt= b.get_bb()
+    b_bbs = b.get_bb()
 
+      # a의 각 바운딩 박스
+    for bl, bb, br, bt in b_bbs:  # b의 각 바운딩 박스
+        if ar < bl: continue
+        if al > br: continue
+        if at < bb: continue
+        if ab > bt: continue
+        return True  # 충돌 발생
+    return False  # 충돌 없음
 
-    if ar<bl: return False
-    if al>br: return False
-    if at<bb: return False
-    if ab>bt : return False
-
-    return True # 충돌발생
 
 def handle_collisions():
-    for group, pairs in collision_pairs.items():
+    for group,pairs in collision_pairs.items():
         for a in pairs[0]:
             for b in pairs[1]:
-                if group == 'knight_top:qblock' and collide_top(a, b):
-                    print(f'{group} collide top')
-                    a.handle_collision(group, b)
-                    b.handle_collision(group, a)
+                if group == 'knight_top:qblock':
 
-                elif collide(a, b):
-                    print(f'{group} collide')
-                    a.handle_collision(group, b)
-                    b.handle_collision(group, a)
+                    if collide_top(a, b):
+                        print(f'{group} collide top')
+                        a.handle_collision(group, b)
+                        b.handle_collision(group, a)
+                if group == 'knight_bottom:stage':
+
+                            if collide_bottom_with_stage(a, b):
+                                print(f'{group} collide bottom')
+                                a.handle_collision(group, b)
+                                b.handle_collision(group, a)
+                else:
+
+                            if collide(a,b):
+                                print(f'{group} collide')
+                                a.handle_collision(group,b)
+                                b.handle_collision(group,a)
+
+
+
 
 
 

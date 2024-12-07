@@ -88,7 +88,7 @@ class Wmonster:
 
 
     def handle_collision(self, group, other):
-        if group == 'slash_effect:wmonster':
+        if group == 'slash_effect:wmonster' or group == 'fire_ball:wmonster':
             self.dying  = True
 
         if group =='knight: wmonster':

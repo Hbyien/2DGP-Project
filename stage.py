@@ -10,7 +10,7 @@ class Stage:
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
         self.x, self.y = 0, 0
-        
+
 
 
         self.bb_offsets = [
@@ -40,3 +40,8 @@ class Stage:
             sy2 = self.y + y2 - server.stage.window_bottom
             bbs.append((sx1, sy1, sx2, sy2))
         return bbs
+
+    def handle_collision(self, group, other):
+        if group == 'knight_bottom:stage':
+            pass
+

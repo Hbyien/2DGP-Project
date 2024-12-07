@@ -19,6 +19,7 @@ from fly import Fly
 from coin import Coin
 from qblock import Qblock
 
+
 def handle_events():
 
     #global dir, look_right, stop, is_jumping, velocity
@@ -70,15 +71,20 @@ def init():
     game_world.add_collision_pair('slash_effect:wmonster',None,wmonster)
     game_world.add_collision_pair('slash_effect:fly',None,fly)
 
+    game_world.add_collision_pair('fire_ball:wmonster', None, wmonster)
+    game_world.add_collision_pair('fire_ball:fly', None, fly)
+
     #game_world.add_collision_pair('knight:coin', knight, coin)
     game_world.add_collision_pair('knight_top:qblock', server.knight, qblock)
     game_world.add_collision_pair('knight:qblock', server.knight, qblock)
 
-    game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
+    #game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
 
     game_world.add_collision_pair('knight:coin', server.knight, None)
     game_world.add_collision_pair('knight:mushroom', server.knight, None)
     game_world.add_collision_pair('knight:flower', server.knight, None)
+
+    game_world.add_collision_pair('knight_bottom:stage', server.knight, server.stage)
 
     #game_world.add_collision_pair('knight: wmonster', None,  wmonster)
     #game_world.add_collision_pair('knight: wmonster', knight,  None)

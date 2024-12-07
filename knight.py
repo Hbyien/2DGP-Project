@@ -14,7 +14,7 @@ import server
 from server import stage
 from qblock import Qblock
 
-BOTTOM = 250
+BOTTOM = 270
 
 #RUN SPEED
 PIXEL_PER_METER = (10.0/0.3)
@@ -34,7 +34,7 @@ class Idle:
     def enter(knight, e):
         if Slash.is_Slash:
             return
-        if Fire.is_Fire:
+        elif Fire.is_Fire:
             return
         elif Jump.is_Jump:
             return
@@ -86,6 +86,8 @@ class Run:
     def enter(knight, e):
         if not Slash.is_Slash and not Jump.is_Jump:
             knight.frame = 0
+        if not Fire.is_Fire and not Jump.is_Jump:
+            knight.frame = 0
         if right_down(e) or left_up(e):
             knight.dir, knight.face_dir = 1, 1
         elif left_down(e) or right_up(e):
@@ -97,6 +99,8 @@ class Run:
 
         if c_down(e):
             Slash.enter(knight, e)
+        elif f_down(e):
+            Fire.enter(knight,e)
 
         elif space_down(e):
             Jump.enter(knight, e)
@@ -106,6 +110,8 @@ class Run:
     def do(knight):
         if Slash.is_Slash:
             Slash.do(knight)
+        elif Fire.is_Fire:
+            Fire.do(knight)
         elif Jump.is_Jump:
             Jump.do(knight)
         else:
@@ -121,6 +127,8 @@ class Run:
     def draw(knight):
         if Slash.is_Slash:
             Slash.draw(knight)
+        elif Fire.is_Fire:
+            Fire.draw(knight)
         elif Jump.is_Jump:
             Jump.draw(knight)
         else:
@@ -162,20 +170,20 @@ class Jump:
             knight.block_collide = False
         else:
             # 수평 이동: 점프 시에도 이동 방향 유지
-            knight.x += knight.dir * RUN_SPEED_PPS * 0.5 * game_framework.frame_time  # x 이동 거리를 줄임
-            #knight.x = clamp(10, knight.x, 1190)  # 화면 경계 안으로 제한
+            knight.x += knight.dir * RUN_SPEED_PPS * 0.7 * game_framework.frame_time  # x 이동 거리를 줄임
+
 
         if knight.jump_top_collide == True:
             Jump.velocity = -5
             knight.jump_top_collide = False
 
+        # stage랑 충돌시 점프 종료
+        if Jump.is_Jump == True:
+            if knight.bottom_collide == True:
 
+                knight.y = knight.bottom_collide_y +5
+                Jump.is_Jump = False
 
-
-        # 착지 시 점프 종료
-        if knight.y <= BOTTOM:  # 지면 높이에 도달하면
-            knight.y = BOTTOM
-            Jump.is_Jump = False
 
     @staticmethod
     def draw(knight):
@@ -233,7 +241,8 @@ class Fire:
     @staticmethod
     def enter(knight, e):
         #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
-            if not Slash.is_Slash:
+        if knight.knight_fire == True:
+            if not Fire.is_Fire:
                 knight.frame = 0
 
                 if right_down(e) or left_down(e):
@@ -254,7 +263,8 @@ class Fire:
 
         knight.frame = (knight.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if knight.frame >= 2:
-            Slash.is_Slash = False
+            Fire.is_Fire = False
+
     @staticmethod
     def draw(knight):
         if knight.face_dir == 1:
@@ -282,6 +292,7 @@ class Knight:
         self.jump_top_collide = False
         self.block_collide = False
         self.bottom_collide = False
+        self.bottom_collide_y =0
 
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -294,7 +305,7 @@ class Knight:
         #self.x, self.y = get_canvas_width() / 2, get_canvas_height() / 2
 
         self.x = 400
-        self.y = server.stage.h / 2 -115
+        self.y = server.stage.h / 2 -110
 
         self.coin_count = 0
 
@@ -312,13 +323,15 @@ class Knight:
             self.character_idle = load_image('image//idle_fire.png')
             self.character_jump = load_image('image//jump_fire.png')
             self.character_slash = load_image('image//slash_fire.png')
-            if time.time() - self.current_time >= 3.0:
+            if time.time() - self.current_time >= 10.0:
                 self.character_walk = load_image('image//walk.png')
                 self.character_idle = load_image('image//idle.png')
                 self.character_jump = load_image('image//jump.png')
                 self.character_slash = load_image('image//slash.png')
                 self.knight_fire = False
 
+        self.bottom_collide = False
+        self.bottom_collide_y = 0
 
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
@@ -342,8 +355,8 @@ class Knight:
     def fire_ball(self):
         fire_ball = Fire_Ball(self.sx, self.sy, self.face_dir*15)
         game_world.add_object(fire_ball, 1)
-        #game_world.add_collision_pair('slash_effect:wmonster', slash_effect, None)
-        #game_world.add_collision_pair('slash_effect:fly', slash_effect, None)
+        game_world.add_collision_pair('fire_ball:wmonster', fire_ball, None)
+        game_world.add_collision_pair('fire_ball:fly', fire_ball, None)
 
 
     def get_bb(self):
@@ -360,7 +373,7 @@ class Knight:
 
 
         if group == 'knight:wmonster':
-            game_framework.quit()
+            pass
 
         if group == 'knight:coin':
             pass
@@ -373,13 +386,18 @@ class Knight:
             pass
 
         if group == 'knight_top:qblock':
-
             self.jump_top_collide = True
+
         if group == 'knight:qblock':
             self.block_collide = True
 
         if group == 'knight_bottom:qblock':
             self.bottom_collide = True
+
+        if group == 'knight_bottom:stage':
+            self.bottom_collide = True
+            self.bottom_collide_y = self.sy
+            pass
 
         pass
 
