@@ -72,6 +72,7 @@ def init():
         game_world.add_collision_pair('knight_top:qblock', server.knight, qblock)
         game_world.add_collision_pair('knight:qblock', server.knight, qblock)
         game_world.add_collision_pair('knight_bottom:qblock', server.knight, qblock)
+        game_world.add_collision_pair('knight_big:qblock', None, qblock)
 
     brick_location = [(1046,  430), (1146, 430), (1248, 430), (3957, 430), (4058, 430), (4825, 430), (5132, 430), (5182, 430),
                       (4112, 650),(4162, 650), (4212, 650),(4262,650), (4312, 650),(4362, 650 ), (4162, 650), (4662, 650)
@@ -83,6 +84,7 @@ def init():
         game_world.add_collision_pair('knight_top:brick', server.knight, brick)
         game_world.add_collision_pair('knight:brick', server.knight, brick)
         game_world.add_collision_pair('knight_bottom:brick', server.knight, brick)
+
 
     wmonster_location = [(800, 280), (4000, 280), (5350, 280), (6100, 280)]
     for x, y in wmonster_location:

@@ -5,7 +5,7 @@ from pico2d import *
 
 import server
 
-
+import knight
 
 class Brick:
     def __init__(self, x = None, y = None):
@@ -39,6 +39,11 @@ class Brick:
         if group == 'knight_bottom:brick':
             pass
         if group == 'knight:brick':
+            if knight.Knight.knight_mushroom == True:
+                game_world.remove_object(self)
             pass
+
+        if group == 'knight_big:brick':
+            game_world.remove_object(self)
 
 

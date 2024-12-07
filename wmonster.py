@@ -3,8 +3,8 @@ import random
 import game_framework
 import game_world
 
+import knight
 import server
-
 from pico2d import *
 
 PIXEL_PER_METER = (10.0 / 0.3)
@@ -34,7 +34,7 @@ class Wmonster:
         self.dying = False
         self.die_frame = 0
         self.die_frame_time = 0.0
-        self.extra_time = 1.0
+        self.extra_time = 0.1
         self.is_extra_time_active = False
 
         self.sx, self.sy = 0, 0
@@ -100,5 +100,7 @@ class Wmonster:
         if group == 'slash_effect:wmonster' or group == 'fire_ball:wmonster':
             self.dying  = True
 
-        if group =='knight: wmonster':
+        if group =='knight:wmonster':
+            if knight.Knight.knight_mushroom == True:
+                game_world.remove_object(self)
             pass

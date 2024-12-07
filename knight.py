@@ -83,9 +83,9 @@ class Idle:
             Jump.draw(knight)
         else:
             if knight.face_dir == 1:
-                knight.character_idle.clip_draw(int(knight.frame) * 94, 0, 94, 101, knight.sx, knight.sy)
+                knight.character_idle.clip_draw(int(knight.frame) * 94, 0, 94, 101, knight.sx, knight.sy, knight.large_x, knight.large_y)
             else:
-                knight.character_idle.clip_composite_draw(int(knight.frame) * 94, 0, 94, 101, 0, 'h', knight.sx, knight.sy, 100, 100)
+                knight.character_idle.clip_composite_draw(int(knight.frame) * 94, 0, 94, 101, 0, 'h', knight.sx, knight.sy, knight.large_x, knight.large_y)
 
 
 class Run:
@@ -147,9 +147,9 @@ class Run:
             Jump.draw(knight)
         else:
             if knight.face_dir == 1:
-                knight.character_walk.clip_draw(int(knight.frame) * 96, 0, 96, 94, knight.sx, knight.sy)
+                knight.character_walk.clip_draw(int(knight.frame) * 96, 0, 96, 94, knight.sx, knight.sy, knight.large_x, knight.large_y)
             else:
-                knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.sx, knight.sy, 100, 100)
+                knight.character_walk.clip_composite_draw(int(knight.frame) * 96, 0, 96, 94, 0, 'h', knight.sx, knight.sy, knight.large_x, knight.large_y)
 
 
 class Jump:
@@ -213,9 +213,9 @@ class Jump:
 
         # 방향에 따라 점프 애니메이션 출력
         if knight.face_dir == 1:
-            knight.character_jump.clip_draw(Jump.jump_frame * 96, 0, 96, 94, knight.sx, knight.sy)
+            knight.character_jump.clip_draw(Jump.jump_frame * 96, 0, 96, 94, knight.sx, knight.sy, knight.large_x, knight.large_y)
         else:
-            knight.character_jump.clip_composite_draw(Jump.jump_frame * 96, 0, 96, 94, 0, 'h', knight.sx, knight.sy, 100, 100)
+            knight.character_jump.clip_composite_draw(Jump.jump_frame * 96, 0, 96, 94, 0, 'h', knight.sx, knight.sy, knight.large_x, knight.large_y)
 
 
 class Slash:
@@ -249,9 +249,9 @@ class Slash:
     @staticmethod
     def draw(knight):
         if knight.face_dir == 1:
-            knight.character_slash.clip_draw(int(knight.frame) * 93, 0, 93, 100, knight.sx, knight.sy)
+            knight.character_slash.clip_draw(int(knight.frame) * 93, 0, 93, 100, knight.sx, knight.sy, knight.large_x, knight.large_y)
         else:
-            knight.character_slash.clip_composite_draw(int(knight.frame) * 93, 0, 93, 100, 0, 'h', knight.sx, knight.sy, 100, 100)
+            knight.character_slash.clip_composite_draw(int(knight.frame) * 93, 0, 93, 100, 0, 'h', knight.sx, knight.sy, knight.large_x, knight.large_y)
 
 class Fire:
     is_Fire = False
@@ -293,6 +293,8 @@ class Fire:
 
 
 class Knight:
+    knight_mushroom = False
+
     def __init__(self):
         #self.x, self.y = 400, BOTTOM
         self.frame = 0
@@ -305,6 +307,8 @@ class Knight:
         self.character_idle = load_image('image//idle.png')
         self.character_jump = load_image('image//jump.png')
         self.character_slash = load_image('image//slash.png')
+        self.heart = load_image('objects//heart.png')
+        self.coin = load_image('objects//coin_1.png')
 
         
         self.jump_top_collide = False
@@ -322,7 +326,7 @@ class Knight:
 
         #self.x, self.y = get_canvas_width() / 2, get_canvas_height() / 2
 
-        self.x = 400
+        self.x = 5000
         self.y = server.stage.h / 2 -110
 
         self.coin_count = 0
@@ -330,6 +334,13 @@ class Knight:
         self.knight_fire = False
         self.current_time = 0.0
         self.life =3
+
+        self.large_x, self.large_y = 100, 100
+        self.by = 45
+        self.by2 = 38
+        self.b1 = 30
+        self.b2 = 35
+
 
 
     def update(self):
@@ -351,8 +362,29 @@ class Knight:
                 self.character_slash = load_image('image//slash.png')
                 self.knight_fire = False
 
+        if Knight.knight_mushroom == True:
+            if self.current_time ==0:
+                self.current_time = time.time()
+            self.large_x, self.large_y = 200, 200
+            #game_world.add_collision_pair('knight_big:brick', server.knight, None)
+            #game_world.add_collision_pair('knight_big:qblock', server.knight, None)
+            self.by = 78
+            self.by2 = 68
+            self.b1 = 60
+            self.b2 = 70
+
+            if time.time() - self.current_time >= 2.0:
+                self.large_x, self.large_y = 100, 100
+
+                self.by = 45
+                self.by2 = 38
+                self.b1 = 30
+                self.b2 = 35
+                Knight.knight_mushroom = False
         self.bottom_collide = False
         self.bottom_collide_y = 0
+        #Knight.knight_mushroom = False
+
 
 
 
@@ -365,10 +397,26 @@ class Knight:
         draw_rectangle(*self.get_bb_top())
 
         draw_rectangle(*self.get_bb_bottom())
+        # if self.knight_mushroom == True:
+        #     # draw_rectangle(*self.get_bb_big())
+        #     # draw_rectangle(*self.get_bb_bottom_big())
 
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
 
+        self.heart_draw()
+        self.coin_draw()
+
+    def heart_draw(self):
+        if self.life >= -29:
+            self.heart.draw(130, 750, 80,80)
+        if self.life >= -34:
+            self.heart.draw(80, 750, 80, 80)
+        if self.life >= -37:
+            self.heart.draw(30, 750, 80, 80)
+
+    def coin_draw(self):
+        self.coin.draw(200, 750, 50, 50)
     def slash_effect(self):
         slash_effect = Slash_Effect(self.sx, self.sy, self.face_dir*15)
         game_world.add_object(slash_effect, 1)
@@ -383,27 +431,36 @@ class Knight:
 
 
     def get_bb(self):
+        return self.sx - self.b1, self.sy - self.b2, self.sx + self.b1, self.sy + self.b2
 
-        return self.sx - 30, self.sy - 35, self.sx + 30, self.sy + 35
-
+    def get_bb_big(self):
+        return self.sx - 60, self.sy - 70, self.sx + 60, self.sy + 70
     def get_bb_top(self):   #머리 충돌 체크 위한거
         return self.sx - 25, self.sy +40, self.sx + 25, self.sy + 47
 
     def get_bb_bottom(self): # 발 충돌체크 위한거
-        return self.sx - 25, self.sy - 45, self.sx + 25, self.sy - 38
+        return self.sx - 25, self.sy -self.by, self.sx + 25, self.sy - self.by2
+    def get_bb_bottom_big(self): # 발 충돌체크 위한거
+        return self.sx - 50, self.sy - 90, self.sx + 50, self.sy - 76
 
     def handle_collision(self, group, other):
 
 
         if group == 'knight:wmonster':
-            self.life-= 1
-            self.x = 400
-            self.y = server.stage.h / 2 - 110
+            if Knight.knight_mushroom == True:
+                pass
+            else:
+                self.life-= 1
+                self.x = 400
+                self.y = server.stage.h / 2 - 110
 
         if group == 'knight:fly':
-            self.life-= 1
-            self.x = 400
-            self.y = server.stage.h / 2 - 110
+            if Knight.knight_mushroom == True:
+                pass
+            else:
+                self.life -= 1
+                self.x = 400
+                self.y = server.stage.h / 2 - 110
 
         if group == 'knight:coin':
             self.coin_count += 1
@@ -411,6 +468,7 @@ class Knight:
             pass
 
         if group == 'knight:mushroom':
+            Knight.knight_mushroom = True
             pass
 
         if group == 'knight:flower':
@@ -447,6 +505,8 @@ class Knight:
             self.bottom_collide_y = self.sy
             pass
 
+
+            pass
         pass
 
 

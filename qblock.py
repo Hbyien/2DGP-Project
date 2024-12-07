@@ -7,6 +7,7 @@ from coin import Coin
 from mushroom import Mushroom
 from flower import Flower
 import server
+import knight
 
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 10.0
@@ -48,7 +49,14 @@ class Qblock:
     def handle_collision(self, group, other):
         if group == 'knight_top:qblock':
             if self.already_collision == False:
-                random.choice([self.coin, self.flower, self.mushroom])()
+                if self.x == 842:
+                    self.flower()
+                elif self.x == 5440:
+                    self.mushroom()
+                else:
+                    self.coin()
+
+
 
 
             self.already_collision = True
@@ -57,7 +65,11 @@ class Qblock:
         if group == 'knight_bottom:qblock':
             pass
         if group == 'knight:qblock':
+            if knight.Knight.knight_mushroom == True:
+                game_world.remove_object(self)
             pass
+        if group == 'knight_big:qblock':
+            game_world.remove_object(self)
 
     def coin(self):
         self.sx = self.x - server.stage.window_left

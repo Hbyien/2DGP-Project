@@ -5,6 +5,7 @@ import game_world
 
 from pico2d import *
 import server
+import knight
 
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 10.0
@@ -96,5 +97,7 @@ class Fly:
         if group == 'slash_effect:fly' or group == 'fire_ball:fly':
             self.dying  = True
 
-        if group =='knight: fly':
+        if group =='knight:fly':
+            if knight.Knight.knight_mushroom == True:
+                game_world.remove_object(self)
             pass

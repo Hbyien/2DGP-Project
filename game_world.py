@@ -125,6 +125,18 @@ def collide_bottom_with_stage(a, b):
         return True  # 충돌 발생
     return False  # 충돌 없음
 
+def collide_big(a, b):
+
+    al, ab, ar, at = a.get_bb_big()
+    bl, bb, br, bt = b.get_bb()
+
+
+    if ar<bl: return False
+    if al>br: return False
+    if at<bb: return False
+    if ab>bt : return False
+
+    return True # 충돌발생
 
 def handle_collisions():
     for group,pairs in collision_pairs.items():
@@ -136,6 +148,7 @@ def handle_collisions():
                         print(f'{group} collide top')
                         a.handle_collision(group, b)
                         b.handle_collision(group, a)
+
                 elif group == 'knight_top:brick':
 
                     if collide_top(a, b):
