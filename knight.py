@@ -160,7 +160,7 @@ class Jump:
 
     @staticmethod
     def enter(knight, e):
-        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
 
             if not Jump.is_Jump : # 점프 중이 아닐 때만 초기화
                 knight.frame = 0
@@ -176,7 +176,7 @@ class Jump:
     def do(knight):
 
         # 수직 이동: 점프 속도와 중력 적용
-        knight.y += Jump.velocity ** 2 * 0.02 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
+        knight.y += Jump.velocity ** 2 * 0.03 * Jump.gravity * (-1 if Jump.velocity < 0 else 1)
         Jump.velocity -= 20 * game_framework.frame_time
 
 
@@ -223,7 +223,7 @@ class Slash:
 
     @staticmethod
     def enter(knight, e):
-        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
             if not Slash.is_Slash:
                 knight.frame = 0
 
@@ -258,18 +258,18 @@ class Fire:
 
     @staticmethod
     def enter(knight, e):
-        #if rhythm_bar.Rhythm_Bar.rhythm_perfect:
-        if knight.knight_fire == True:
-            if not Fire.is_Fire:
-                knight.frame = 0
+        if rhythm_bar.Rhythm_Bar.rhythm_perfect:
+            if knight.knight_fire == True:
+                if not Fire.is_Fire:
+                    knight.frame = 0
 
-                if right_down(e) or left_down(e):
-                    knight.dir, knight.face_dir = 1, 1
-                elif left_down(e) or right_up(e):
-                    knight.dir, knight.face_dir = -1, -1
+                    if right_down(e) or left_down(e):
+                        knight.dir, knight.face_dir = 1, 1
+                    elif left_down(e) or right_up(e):
+                        knight.dir, knight.face_dir = -1, -1
 
-                Fire.is_Fire = True
-            knight.fire_ball()
+                    Fire.is_Fire = True
+                knight.fire_ball()
 
 
     @staticmethod
