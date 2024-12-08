@@ -8,7 +8,7 @@ def init():
     global image
     global logo_start_time
 
-    image = load_image('image//title.png')
+    image = load_image('image//clear.png')
     logo_start_time = get_time()
 
 

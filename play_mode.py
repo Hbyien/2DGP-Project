@@ -118,7 +118,7 @@ def init():
 
     game_world.add_collision_pair('knight_bottom:stage', server.knight, server.stage)
     game_world.add_collision_pair('knight:stage', server.knight, server.stage)
-
+    game_world.add_collision_pair( 'knight:flag', server.knight, server.stage)
 
 
 

@@ -138,6 +138,23 @@ def collide_big(a, b):
 
     return True # 충돌발생
 
+def collide_flage(a, b):
+
+    al, ab, ar, at = a.get_bb()
+    bl, bb, br, bt = b.get__bb2()
+
+
+    if ar<bl: return False
+    if al>br: return False
+    if at<bb: return False
+    if ab>bt : return False
+
+    return True # 충돌발생
+
+
+
+
+
 def handle_collisions():
     for group,pairs in collision_pairs.items():
         for a in pairs[0]:
@@ -145,6 +162,11 @@ def handle_collisions():
                 if group == 'knight_top:qblock':
 
                     if collide_top(a, b):
+                        print(f'{group} collide top')
+                        a.handle_collision(group, b)
+                        b.handle_collision(group, a)
+                elif group == 'knight:flag':
+                    if collide_flage(a, b):
                         print(f'{group} collide top')
                         a.handle_collision(group, b)
                         b.handle_collision(group, a)

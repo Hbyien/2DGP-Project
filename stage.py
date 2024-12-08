@@ -66,7 +66,7 @@ class Stage:
         # 각 충돌 박스를 그림
         for bb in self.get_bb():
             draw_rectangle(*bb)
-
+        draw_rectangle(*self.get__bb2())
     def update(self):
         self.window_left = clamp(0, int(server.knight.x) - self.cw // 2, self.w - self.cw - 1)
         self.window_bottom = clamp(0, int(server.knight.y) - self.cw // 2, self.h - self.ch - 1)
@@ -85,6 +85,9 @@ class Stage:
             bbs.append((sx1, sy1, sx2, sy2))
         return bbs
 
+    def get__bb2(self):
+        return 10000, 200, 10144, 800
+
     def handle_collision(self, group, other):
         if group == 'knight_bottom:stage':
             pass
@@ -92,3 +95,5 @@ class Stage:
         if group == 'knight:stage':
             pass
 
+        if group == 'knight:flag':
+            pass

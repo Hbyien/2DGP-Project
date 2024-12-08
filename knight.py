@@ -3,6 +3,7 @@ from pico2d import load_image, clamp, draw_rectangle, get_canvas_width, get_canv
 
 import time
 
+import clear_mode
 import game_world
 import game_framework
 from slash_effect import Slash_Effect
@@ -14,6 +15,8 @@ import server
 from server import stage
 from qblock import Qblock
 from brick import Brick
+
+import lose_mode
 
 BOTTOM = 270
 
@@ -328,7 +331,7 @@ class Knight:
 
         #self.x, self.y = get_canvas_width() / 2, get_canvas_height() / 2
 
-        self.x = 5000
+        self.x = 200
         self.y = server.stage.h / 2 -110
 
         self.coin_count = 0
@@ -387,9 +390,13 @@ class Knight:
         self.bottom_collide_y = 0
         #Knight.knight_mushroom = False
 
+        if self.life <-37:
+            game_framework.change_mode(lose_mode)
 
+        if self.x > 10128:
+            game_framework.change_mode(clear_mode)
 
-
+        print(self.x)
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
 
@@ -508,6 +515,9 @@ class Knight:
             self.bottom_collide = True
             self.bottom_collide_y = self.sy
             pass
+
+        if group == 'knight:flag':
+            game_framework.change_mode(clear_mode)
 
 
             pass
