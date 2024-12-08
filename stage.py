@@ -1,4 +1,4 @@
-from pico2d import load_image, get_canvas_width, get_canvas_height, clamp, draw_rectangle
+from pico2d import load_image, get_canvas_width, get_canvas_height, clamp, draw_rectangle, load_music
 
 import server
 
@@ -10,6 +10,10 @@ class Stage:
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
         self.x, self.y = 0, 0
+
+        self.bgm = load_music('stage1.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
 
 
 

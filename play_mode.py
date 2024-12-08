@@ -20,6 +20,7 @@ from coin import Coin
 from qblock import Qblock
 from brick import Brick
 
+
 def handle_events():
 
     #global dir, look_right, stop, is_jumping, velocity

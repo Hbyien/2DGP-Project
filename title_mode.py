@@ -1,15 +1,18 @@
-from pico2d import load_image, clear_canvas, update_canvas, get_events, draw_rectangle
+from pico2d import load_image, clear_canvas, update_canvas, get_events, draw_rectangle, load_music
 from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDLK_UP, SDLK_DOWN
 
 import game_framework
 import play_mode
-#import play_mode_2
+
 
 
 def init():
-    global image, current_bb
+    global image, current_bb, bgm
     image = load_image('image//choice.png')
     current_bb = None  # 현재 선택된 bounding box
+    bgm = load_music('choice.mp3')
+    bgm.set_volume(32)
+    bgm.repeat_play()
 
 def finish():
     global image
