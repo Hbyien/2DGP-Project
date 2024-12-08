@@ -34,7 +34,7 @@ class Qblock:
 
 
         self.block1_image.draw(self.sx, self.sy, 50, 50)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
         if self.already_collision:
             self.block2_image.draw(self.sx, self.sy, 50, 50)

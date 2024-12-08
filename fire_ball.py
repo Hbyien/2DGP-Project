@@ -32,7 +32,7 @@ class Fire_Ball:
             self.image.clip_draw(int(self.frame) * self.frame_width, 0, self.frame_width, self.frame_height, self.x,self.y, 30, 30)
         else:
             self.image.clip_composite_draw(int(self.frame) * self.frame_width, 0, self.frame_width, self.frame_height, 0, 'h', self.x,self.y, 30, 30)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
 
     def update(self):

@@ -33,7 +33,7 @@ class Coin:
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
         self.coin_image.clip_draw(int(self.frame) * self.frame_width, 0, self.frame_width, self.frame_height, self.sx, self.sy, 50, 50)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         self.sx = self.x - server.stage.window_left

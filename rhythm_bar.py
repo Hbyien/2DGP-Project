@@ -2,6 +2,8 @@ from pico2d import load_image
 import game_world
 import game_framework
 
+
+
 class Rhythm_Bar:
     image = None
     rhythm_perfect = False
@@ -11,7 +13,7 @@ class Rhythm_Bar:
             Rhythm_Bar.image = load_image('image//rhythm_bar.png')
 
         self.x1 = 20
-        self.velocity = 5  # 속도 설정
+        self.velocity = 3  # 속도 설정
         self.x2 = 1580
 
     def draw(self):
@@ -27,8 +29,7 @@ class Rhythm_Bar:
         if  self.x1>=750:
             Rhythm_Bar.rhythm_perfect = True
               # 600에 도달했음을 표시
-        elif self.x1< 700:
-            Rhythm_Bar.rhythm_perfect = False  # 아직 도달하지 않음
+
         if self.x1 >= 800:
-            self.x1 = 20  # 초기 위치로 재설정
-            self.x2 = 1580
+            game_world.remove_object(self)
+            Rhythm_Bar.rhythm_perfect = False

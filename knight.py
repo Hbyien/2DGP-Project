@@ -396,16 +396,22 @@ class Knight:
         if self.x > 10128:
             game_framework.change_mode(clear_mode)
 
+        if self.y<200:
+            self.life -= 1
+            self.x = 400
+            self.y = server.stage.h / 2 - 110
+
+
         print(self.x)
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
-        draw_rectangle(*self.get_bb_top())
+        #draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb_top())
 
-        draw_rectangle(*self.get_bb_bottom())
+        #draw_rectangle(*self.get_bb_bottom())
         # if self.knight_mushroom == True:
         #     # draw_rectangle(*self.get_bb_big())
         #     # draw_rectangle(*self.get_bb_bottom_big())

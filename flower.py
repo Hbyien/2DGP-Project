@@ -19,7 +19,7 @@ class Flower:
     def draw(self):
 
         self.flower_image.draw(self.sx, self.sy, 40, 50)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         self.sx = self.x - server.stage.window_left

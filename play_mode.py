@@ -19,7 +19,11 @@ from fly import Fly
 from coin import Coin
 from qblock import Qblock
 from brick import Brick
+import time  # 시간 측정을 위해 추가
 
+# 타이머 변수 초기화
+last_rhythm_bar_time = 0  # 마지막 Rhythm_Bar 생성 시간
+rhythm_bar_interval = 0.5
 
 def handle_events():
 
@@ -38,7 +42,7 @@ def handle_events():
                 server.knight.handle_event(event)
 
 def init():
-
+    global last_rhythm_bar_time
 
     server.stage = Stage()
     game_world.add_object(server.stage, 0)
@@ -53,8 +57,7 @@ def init():
     server.knight = Knight()
     game_world.add_object(server.knight, 1)
 
-    rhythm_bar = Rhythm_Bar()
-    game_world.add_object(rhythm_bar, 2)
+    last_rhythm_bar_time = time.time()
 
 
 
@@ -130,6 +133,17 @@ def finish():
     pass
 
 def update():
+    global last_rhythm_bar_time
+
+    # 현재 시간을 가져옴
+    current_time = time.time()
+
+    # Rhythm_Bar 생성 타이머 체크
+    if current_time - last_rhythm_bar_time >= rhythm_bar_interval:
+        rhythm_bar = Rhythm_Bar()
+        game_world.add_object(rhythm_bar, 2)
+        last_rhythm_bar_time = current_time  # 타이머 갱신
+
     game_world.update()
     game_world.handle_collisions()
 

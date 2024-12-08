@@ -68,9 +68,9 @@ class Stage:
     def draw(self):
         self.image.clip_draw_to_origin(self.window_left, self.window_bottom, self.cw, self.ch, 0, 150)
         # 각 충돌 박스를 그림
-        for bb in self.get_bb():
-            draw_rectangle(*bb)
-        draw_rectangle(*self.get__bb2())
+        #for bb in self.get_bb():
+            #draw_rectangle(*bb)
+        #draw_rectangle(*self.get__bb2())
     def update(self):
         self.window_left = clamp(0, int(server.knight.x) - self.cw // 2, self.w - self.cw - 1)
         self.window_bottom = clamp(0, int(server.knight.y) - self.cw // 2, self.h - self.ch - 1)

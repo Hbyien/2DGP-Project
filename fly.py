@@ -82,7 +82,7 @@ class Fly:
             elif self.dir ==-1:
                 self.idle_image.clip_draw(int(self.frame)* self.frame_width, 0, self.frame_width, self.frame_height, self.sx, self.sy)
 
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
         pass

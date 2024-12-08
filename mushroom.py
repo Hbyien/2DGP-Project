@@ -20,7 +20,7 @@ class Mushroom:
         self.sx = self.x - server.stage.window_left
         self.sy = self.y - server.stage.window_bottom
         self.mushroom_image.draw(self.sx, self.sy, 40, 50)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         self.sx = self.x - server.stage.window_left

@@ -23,7 +23,7 @@ class Brick:
 
 
         self.image.draw(self.sx, self.sy)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         self.sx = self.x - server.stage.window_left

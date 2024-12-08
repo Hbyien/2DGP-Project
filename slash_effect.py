@@ -20,7 +20,7 @@ class Slash_Effect:
         else:
             self.image.clip_composite_draw(0, 0, 190, 144, 0, 'h', self.x, self.y, 100, 100)
 
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
 
     def update(self):
